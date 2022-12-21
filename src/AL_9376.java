@@ -5,7 +5,7 @@ public class AL_9376 {
     static int T, h, w;
     static char[][] map;
     static boolean[][] visit;
-    static int keyCount = 0;
+    static int keyCount = 2;
     static int[] dx = new int[] {-1, 1, 0, 0};
     static int[] dy = new int[] {0, 0, -1, 1};
     static int ans;
@@ -14,26 +14,25 @@ public class AL_9376 {
         int x;
         int y;
         int count;
-        int keyFound;
 
-        public Pointer(int x, int y, int count, int keyFound) {
+        public Pointer(int x, int y, int count) {
             this.x = x;
             this.y = y;
             this.count = count;
-            this.keyFound = keyFound;
         }
     }
 
     public static void bfs(int x, int y) {
         ArrayList<Pointer> q = new ArrayList<>();
 
-        q.add(new Pointer(x,y,0,0));
+        q.add(new Pointer(x,y,0));
         visit[x][y] = true;
+        int keyFound = 0;
 
         while (!q.isEmpty()) {
             Pointer temp = q.remove(0);
 
-            if(temp.keyFound == keyCount) {
+            if(keyFound == keyCount) {
                 if(ans > temp.count)
                     ans = temp.count;
                 continue;
@@ -50,15 +49,18 @@ public class AL_9376 {
                 if(map[nextX][nextY] == '*')
                     continue;
                 if(map[nextX][nextY] == '#') {
-                    q.add(new Pointer(nextX, nextY, temp.count+1, temp.keyFound));
+                    q.add(new Pointer(nextX, nextY, temp.count+1));
                     visit[nextX][nextY] = true;
+                    continue;
                 }
                 if(map[nextX][nextY] == '$') {
-                    q.add(0, new Pointer(nextX, nextY, temp.count, temp.keyFound+1));
+                    q.add(0, new Pointer(nextX, nextY, temp.count));
                     visit[nextX][nextY] = true;
+                    keyFound++;
+                    continue;
                 }
 
-                q.add(0, new Pointer(nextX, nextY, temp.count, temp.keyFound));
+                q.add(0, new Pointer(nextX, nextY, temp.count));
                 visit[nextX][nextY] = true;
             }
         }
@@ -97,13 +99,13 @@ public class AL_9376 {
                 line = st.nextToken().toCharArray();
                 for(int k=1; k<w+1; k++) {
                     map[j][k] = line[k-1];
-                    if(map[j][k] == '$')
-                        keyCount++;
                 }
             }
 
             bfs(0,0);
-            System.out.println(ans);
+            bw.write(ans + "\n");
         }
+        bw.flush();
+        bw.close();
     }
 }
