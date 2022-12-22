@@ -54,9 +54,11 @@ public class AL_9376 {
                     continue;
                 }
                 if(map[nextX][nextY] == '$') {
+                    q = new ArrayList<>();
                     q.add(0, new Pointer(nextX, nextY, temp.count));
                     visit[nextX][nextY] = true;
                     keyFound++;
+                    visit = new boolean[h+2][w+2];
                     continue;
                 }
 
