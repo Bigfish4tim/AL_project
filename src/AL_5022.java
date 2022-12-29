@@ -13,23 +13,84 @@ public class AL_5022 {
     static int[] dx = new int[] {-1, 1, 0, 0};
     static int[] dy = new int[] {0, 0, -1, 1};
 
-    public static void bfs(int x, int y) {
+    public static class Point {
+        int x;
+        int y;
+        int count;
+        Point pre;
+        public Point(int x, int y, int count) {
+            this.x = x;
+            this.y = y;
+            this.count = count;
+            this.pre = null;
+        }
+        public Point(int x, int y, int count, Point pre) {
+            this.x = x;
+            this.y = y;
+            this.count = count;
+            this.pre = pre;
+        }
+    }
+
+    public static void bfsInit(int x, int y, int fx, int fy) {
+        Queue<Point> q = new LinkedList<>();
+        q.add(new Point(x,y,0));
+        visit[x][y] = true;
+
+        while (!q.isEmpty()) {
+            Point temp = q.poll();
+
+            for (int i=0; i<4; i++) {
+                int nextX = temp.x + dx[i];
+                int nextY = temp.y + dy[i];
+
+                if(nextX < 0 || nextY < 0 || nextX >= M || nextY >= N)
+                    continue;
+                if(nextX == fx && nextY == fy) {
+                    if(min > temp.count+1) {
+                        min = temp.count+1;
+                    }
+                    visit = new boolean[M][N];
+                    visit[nextX][nextY] = true;
+                    while (true) {
+                        visit[temp.x][temp.y] = true;
+                        if(temp.pre == null)
+                            break;
+                        temp = temp.pre;
+                    }
+                    return;
+                }
+                if(visit[nextX][nextY])
+                    continue;
+
+                q.add(new Point(nextX, nextY, temp.count+1, temp));
+                visit[nextX][nextY] = true;
+            }
+        }
+    }
+
+    public static void bfs(int x, int y, int fx, int fy) {
         Queue<int[]> q = new LinkedList<>();
         q.add(new int[] {x,y,0});
         visit[x][y] = true;
 
         while (!q.isEmpty()) {
             int[] temp = q.poll();
-            if(temp[0] == b2[0] && temp[1] == b2[1]) {
-                if(min > temp[2])
-                    min = temp[2];
-            }
+//            if(temp[0] == b2[0] && temp[1] == b2[1]) {
+//                if(min > temp[2])
+//                    min = temp[2];
+//            }
             for (int i=0; i<4; i++) {
                 int nextX = temp[0] + dx[i];
                 int nextY = temp[1] + dy[i];
 
-                if(nextX < 0 || nextY < 0 || nextX >= N || nextY >= M)
+                if(nextX < 0 || nextY < 0 || nextX >= M || nextY >= N)
                     continue;
+                if(nextX == fx && nextY == fy) {
+                    if(min > temp[2]+1)
+                        min = temp[2]+1;
+                    return;
+                }
                 if(visit[nextX][nextY])
                     continue;
                 q.add(new int[] {nextX, nextY, temp[2]+1});
@@ -66,27 +127,33 @@ public class AL_5022 {
         b2[1] = Integer.parseInt(st.nextToken());
         b2[0] = Integer.parseInt(st.nextToken());
 
-        map = new int[N][M];
-        visit = new boolean[N][M];
+        map = new int[M][N];
+        visit = new boolean[M][N];
 
-        int aXLength = Math.abs(a1[0] - a2[0]);
-        int aYLength = Math.abs(a1[1] - a2[1]);
+        visit[a1[0]][a1[1]] = true;
+        visit[a2[0]][a2[1]] = true;
+        visit[b1[0]][b1[1]] = true;
+        visit[b2[0]][b2[1]] = true;
 
-        int aLength = aXLength + aYLength;
+        int aYLength;
+        int aXLength;
 
-        aLine = new int[aLength+1][2];
+//        for(int i=0; i<=aXLength; i++) {
+//            visit[Math.max(a1[0], a2[0]) - i][a1[1]] = true;
+//        }
+//        for(int i=0; i<aYLength; i++) {
+//            visit[a2[0]][Math.max(a1[1], a2[1]) - i] = true;
+//        }
+        bfsInit(a1[0], a1[1], a2[0], a2[1]);
+        aXLength = min;
+        min = Integer.MAX_VALUE;
 
-        for(int i=0; i<=aXLength; i++) {
-            visit[Math.max(a1[0], a2[0]) - i][a1[1]] = true;
-        }
-        for(int i=0; i<aYLength; i++) {
-            visit[a2[0]][Math.max(a1[1], a2[1]) - i] = true;
-        }
-        bfs(b1[0], b1[1]);
+        bfs(b1[0], b1[1], b2[0], b2[1]);
+        aYLength = min;
 
         if(min == Integer.MAX_VALUE)
             System.out.println("IMPOSSIBLE");
         else
-            System.out.println(min+aLength);
+            System.out.println(aXLength+aYLength);
     }
 }
