@@ -10,12 +10,19 @@ public class AL_9944 {
     static int[] dx = new int[] {-1, 1, 0, 0};
     static int[] dy = new int[] {0, 0, -1, 1};
 
+    public static void dfs(int x, int y) {
+        
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
+
+        map = new char[N][M];
+        visit = new boolean[N][M];
 
         char[] line;
 
@@ -26,7 +33,6 @@ public class AL_9944 {
                 map[i][j] = line[j];
             }
         }
-
-
     }
 }
+
