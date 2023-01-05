@@ -6,16 +6,35 @@ import java.util.*;
 public class AL_14890 {
     static int N, L;
     static int[][] map;
+    static boolean[] visit;
     static int ans = 0;
 
     public static void road(int[] map) {
         for(int i=0; i<map.length; i++) {
+            if(i+1 < map.length && map[i] == map[i+1])
+                continue;
             if(i+L < map.length) {
-                if(map[i] == map[i+1])
-                    continue;
-                for(int j=1; j<L; j++) {
-                    if(Math.abs(map[i] - map[i+j]) >= 2) {
-                        break;
+                int tempCount=0;
+                for(int j=1; j<L+1; j++) {
+                    if(Math.abs(map[i] - map[i+j]) == 1) {
+                        tempCount++;
+                    }
+                }
+                if(tempCount == L) {
+                    for(int j=0; j<L; j++) {
+                        visit[i+j] = true;
+                    }
+                }
+            } else if(i-L >= 0) {
+                int tempCount=0;
+                for(int j=1; j<L+1; j--) {
+                    if(Math.abs(map[i] - map[i+j]) == 1) {
+                        tempCount++;
+                    }
+                }
+                if(tempCount == L) {
+                    for(int j=0; j<L; j++) {
+                        visit[i+j] = true;
                     }
                 }
             }
@@ -30,6 +49,7 @@ public class AL_14890 {
         L = Integer.parseInt(st.nextToken());
 
         map = new int[N][N];
+        visit = new boolean[N];
 
         for(int i=0; i<N; i++) {
             st = new StringTokenizer(br.readLine());
