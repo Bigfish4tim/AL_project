@@ -11,34 +11,36 @@ public class AL_14890 {
 
     public static void road(int[] map) {
         for(int i=0; i<map.length; i++) {
+            boolean trig = false;
             if(i+1 < map.length && map[i] == map[i+1])
                 continue;
             if(i+L < map.length) {
                 int tempCount=0;
-                for(int j=1; j<L+1; j++) {
-                    if(Math.abs(map[i] - map[i+j]) == 1) {
+                for(int j=1; j<L+1; j++)
+                    if(Math.abs(map[i] - map[i+j]) == 1)
                         tempCount++;
-                    }
-                }
                 if(tempCount == L) {
-                    for(int j=0; j<L; j++) {
-                        visit[i+j] = true;
-                    }
+                    trig = true;
+                    for (int j = 0; j < L; j++)
+                        visit[i + j] = true;
                 }
-            } else if(i-L >= 0) {
+            }
+            if(i-L >= 0) {
                 int tempCount=0;
-                for(int j=1; j<L+1; j--) {
-                    if(Math.abs(map[i] - map[i+j]) == 1) {
+                for(int j=1; j<L+1; j++)
+                    if(Math.abs(map[i] - map[i-j]) == 1)
                         tempCount++;
-                    }
-                }
                 if(tempCount == L) {
-                    for(int j=0; j<L; j++) {
-                        visit[i+j] = true;
-                    }
+                    trig = true;
+                    for (int j = 0; j < L; j++)
+                        visit[i - j] = true;
                 }
             }
         }
+    }
+
+    public static void bfs() {
+
     }
 
     public static void main(String[] args) throws IOException {
