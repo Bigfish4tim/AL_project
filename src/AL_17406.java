@@ -77,6 +77,7 @@ public class AL_17406 {
 
         for(int i=0; i<RMap.length; i++) {
             rotMap = rotation(RMap[i][0], RMap[i][1], RMap[i][2]);
+            rotMap = rotation(RMap[i][0], RMap[i][1], RMap[i][2]);
 
         }
     }
