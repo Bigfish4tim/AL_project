@@ -48,6 +48,22 @@ public class AL_17406 {
         return min;
     }
 
+    public static void permutation(int[] arr, int[] out, boolean[] visited, int depth, int r){
+        if(depth == r){
+            for(int num: out) System.out.print(num);
+            System.out.println();
+            return;
+        }
+        for(int i=0; i<arr.length; i++){
+            if(!visited[i]){
+                visited[i] = true;
+                out[depth] = arr[i];
+                permutation(arr, out, visited, depth+1, r);
+                visited[i] = false;
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -76,7 +92,6 @@ public class AL_17406 {
         int[][] rotMap = new int[N][M];
 
         for(int i=0; i<RMap.length; i++) {
-            rotMap = rotation(RMap[i][0], RMap[i][1], RMap[i][2]);
             rotMap = rotation(RMap[i][0], RMap[i][1], RMap[i][2]);
 
         }
