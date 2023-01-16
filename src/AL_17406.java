@@ -11,32 +11,21 @@ public class AL_17406 {
     static Queue<int[]> perm = new LinkedList<>();
 
     public static int[][] rotation(int[][] rotMap, int r, int c, int s) {
-        int[][] tempMap = rotMap.clone();
+        int[][] tempMap = new int[N][M];
+
+        for(int i=0; i<N; i++) {
+            tempMap[i] = rotMap[i].clone();
+        }
 
         for(int i=1; i<=s; i++) {
             int size = i*2;
             for(int j=0; j<size; j++) {
-//                tempMap[r-i][c-i+j+1] = map[r-i][c-i+j];
-//                tempMap[r-i+j+1][c+i] = map[r-i+j][c+i];
-//                tempMap[r+i][c+i-j-1] = map[r+i][c+i-j];
-//                tempMap[r+i-j-1][c-i] = map[r+i-j][c-i];
-
-                tempMap[r-i-1][c-i+j] = map[r-i-1][c-i+j-1];
-                tempMap[r-i+j][c+i-1] = map[r-i+j-1][c+i-1];
-                tempMap[r+i-1][c+i-j-2] = map[r+i-1][c+i-j-1];
-                tempMap[r+i-j-2][c-i-1] = map[r+i-j-1][c-i-1];
+                tempMap[r-1-i][c-i+j] = rotMap[r-1-i][c-1-i+j];
+                tempMap[r-i+j][c-1+i] = rotMap[r-1-i+j][c-1+i];
+                tempMap[r-1+i][c-2+i-j] = rotMap[r-1+i][c-1+i-j];
+                tempMap[r-2+i-j][c-1-i] = rotMap[r-1+i-j][c-1-i];
             }
         }
-
-//        int min = Integer.MAX_VALUE;
-//
-//        for(int i=0; i<N; i++) {
-//            for(int j=0; j<M; j++) {
-//                if(min > tempMap[i][j]) {
-//                    min = tempMap[i][j];
-//                }
-//            }
-//        }
 
         return tempMap;
     }
@@ -45,11 +34,11 @@ public class AL_17406 {
         int min = Integer.MAX_VALUE;
 
         for(int i=0; i<N; i++) {
-            for(int j=0; j<M; j++) {
-                if(min > staticMap[i][j]) {
-                    min = staticMap[i][j];
-                }
-            }
+            int temp = 0;
+            for(int j=0; j<M; j++)
+                temp = temp + staticMap[i][j];
+            if(min > temp)
+                min = temp;
         }
 
         return min;
@@ -58,9 +47,6 @@ public class AL_17406 {
     public static void permutation(int[] arr, int[] out, boolean[] visited, int depth, int r){
         if(depth == r){
             perm.add(out.clone());
-
-//            for(int num: out) System.out.print(num);
-//            System.out.println();
 
             return;
         }
@@ -102,7 +88,10 @@ public class AL_17406 {
             }
         }
 
-        int[][] rotMap = map.clone();
+        int[][] rotMap = new int[N][M];
+
+        for(int i=0; i<N; i++)
+            rotMap[i] = map[i].clone();
 
         permutation(KPoint, new int[K], new boolean[K], 0, K);
 
@@ -117,7 +106,8 @@ public class AL_17406 {
             if(ans > t)
                 ans = t;
 
-            rotMap = map.clone();
+            for(int i=0; i<N; i++)
+                rotMap[i] = map[i].clone();
         }
 
         System.out.println(ans);
