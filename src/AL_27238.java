@@ -82,6 +82,8 @@ public class AL_27238 {
         }
     }
 
+
+    // 27
     public static void lowerCase(int start, int end) {
         for(int i=0; i<M; i++) {
             if(start >= MMap[i][1] && end <= MMap[i][1]) {
