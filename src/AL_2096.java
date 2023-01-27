@@ -21,7 +21,5 @@ public class AL_2096 {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-
-
     }
 }
