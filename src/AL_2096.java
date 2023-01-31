@@ -13,9 +13,7 @@ public class AL_2096 {
     public static void SlindingWindow() {
         int sum = 0;
 
-        for(int i=0; i<N; i++) {
-            sum += map[i][0];
-        }
+        for(int i=0; i<N; i++) sum += map[i][0];
 
         for(int i=N-1; i>=0; i--) {
             for(int j=0; j<3; j++) {
