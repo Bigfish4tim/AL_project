@@ -9,6 +9,7 @@ public class AL_16920 {
     static int[] S;
     static int P;
     static boolean[][] visit;
+    static int[][] PS;
 
     public static void bfs() {
 
@@ -25,6 +26,7 @@ public class AL_16920 {
         map = new char[N][M];
         S = new int[P];
         visit = new boolean[N][M];
+        PS = new int[P][2];
 
         st = new StringTokenizer(br.readLine());
         for(int i=0; i<P; i++)
@@ -34,6 +36,13 @@ public class AL_16920 {
             st = new StringTokenizer(br.readLine());
             for(int j=0; j<M; j++) {
                 map[i][j] = st.nextToken().charAt(0);
+                try {
+                    int temp = Character.getNumericValue(map[i][j]) - 1;
+                    PS[temp][0] = i;
+                    PS[temp][1] = j;
+                } catch (NumberFormatException e) {
+                    int temp = -1;
+                }
             }
         }
     }
