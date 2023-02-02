@@ -8,13 +8,20 @@ public class AL_16920 {
     static char[][] map;
     static int[] S;
     static int P;
+    static int[] PS;
     static boolean[][] visit;
-    static int[][] PS;
     static int[] dx = { -1, 1, 0, 0 };
     static int[] dy = { 0, 0, -1, 1 };
-    static int dotCount = 0;
 
     static Queue<obj> startPoint = new LinkedList<>();
+
+    public static class qObj {
+        Queue<obj> q;
+
+        public qObj(Queue<obj> q) {
+            this.q = q;
+        }
+    }
 
     public static class obj {
         int x;
@@ -50,8 +57,8 @@ public class AL_16920 {
                     continue;
 
                 map[nextX][nextY] = k;
+                PS[Character.getNumericValue(k)-1]++;
                 visit[nextX][nextY] = true;
-                dotCount--;
                 if(temp[2]+1 < count) { q.add(new int[]{nextX, nextY, temp[2] + 1}); }
                 else if(temp[2]+1 == count) { startPoint.add(new obj(nextX, nextY, count, k)); }
             }
@@ -69,11 +76,15 @@ public class AL_16920 {
         map = new char[N][M];
         S = new int[P];
         visit = new boolean[N][M];
-        PS = new int[P][2];
+        PS = new int[P];
+
+        qObj[] queueList = new qObj[P];
 
         st = new StringTokenizer(br.readLine());
-        for(int i=0; i<P; i++)
+        for(int i=0; i<P; i++) {
             S[i] = Integer.parseInt(st.nextToken());
+            PS[i] = 0;
+        }
 
         char[] line;
         for(int i=0; i<N; i++) {
@@ -86,9 +97,9 @@ public class AL_16920 {
 
                 if(temp >= 0) {
                     startPoint.add(new obj(i, j, S[temp], map[i][j]));
+                    queueList[temp].q.add(new obj(i, j, S[temp], map[i][j]));
+                    PS[temp]++;
                 }
-                if(map[i][j] == '.')
-                    dotCount++;
             }
         }
 
@@ -96,10 +107,16 @@ public class AL_16920 {
             obj temp = startPoint.poll();
             bfs(temp.x, temp.y, temp.count, temp.k);
         }
-//        while (dotCount != 0) {
-//            for(int i=0; i<P; i++) {
-//                bfs(PS[i][0], PS[i][1], S[i], map[PS[i][0]][PS[i][1]]);
-//            }
-//        }
+
+        while (true) {
+            for(int i=0; i<P; i++) {
+                obj temp = queueList[i].q.poll();
+                bfs(temp.x, temp.y, temp.count, temp.k);
+            }
+        }
+
+        for(int i=0; i<P; i++) {
+            System.out.print(PS[i] + " ");
+        }
     }
 }
