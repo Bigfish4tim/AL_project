@@ -13,17 +13,10 @@ public class AL_16920 {
     static int[] dx = { -1, 1, 0, 0 };
     static int[] dy = { 0, 0, -1, 1 };
 
+    static PriorityQueue<obj> priostartPoint = new PriorityQueue<>();
     static Queue<obj> startPoint = new LinkedList<>();
 
-    public static class qObj {
-        Queue<obj> q;
-
-        public qObj(Queue<obj> q) {
-            this.q = q;
-        }
-    }
-
-    public static class obj {
+    public static class obj implements Comparable<obj> {
         int x;
         int y;
         int count;
@@ -34,6 +27,31 @@ public class AL_16920 {
             this.y = y;
             this.count = count;
             this.k = k;
+        }
+
+        public int getX() {
+            return this.x;
+        }
+
+        public int getY() {
+            return this.y;
+        }
+
+        public int getCount() {
+            return this.count;
+        }
+
+        public char getK() {
+            return this.k;
+        }
+
+        @Override
+        public int compareTo(obj o) {
+            if(this.k > o.getK())
+                return 1;
+            else if(this.k < o.getK())
+                return -1;
+            return 0;
         }
     }
 
@@ -78,8 +96,6 @@ public class AL_16920 {
         visit = new boolean[N][M];
         PS = new int[P];
 
-        qObj[] queueList = new qObj[P];
-
         st = new StringTokenizer(br.readLine());
         for(int i=0; i<P; i++) {
             S[i] = Integer.parseInt(st.nextToken());
@@ -96,23 +112,18 @@ public class AL_16920 {
                 int temp = Character.getNumericValue(map[i][j]) - 1;
 
                 if(temp >= 0) {
-                    startPoint.add(new obj(i, j, S[temp], map[i][j]));
-                    queueList[temp].q.add(new obj(i, j, S[temp], map[i][j]));
+                    priostartPoint.add(new obj(i, j, S[temp], map[i][j]));
                     PS[temp]++;
                 }
             }
         }
 
+        while (!priostartPoint.isEmpty())
+            startPoint.add(priostartPoint.poll());
+
         while (!startPoint.isEmpty()) {
             obj temp = startPoint.poll();
             bfs(temp.x, temp.y, temp.count, temp.k);
-        }
-
-        while (true) {
-            for(int i=0; i<P; i++) {
-                obj temp = queueList[i].q.poll();
-                bfs(temp.x, temp.y, temp.count, temp.k);
-            }
         }
 
         for(int i=0; i<P; i++) {
