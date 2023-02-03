@@ -71,14 +71,21 @@ public class AL_16920 {
                     continue;
                 if(visit[nextX][nextY])
                     continue;
-                if(map[nextX][nextY] != '.')
+                if(map[nextX][nextY] == '#')
                     continue;
+                if(map[nextX][nextY] == k) {
+                    visit[nextX][nextY] = true;
+                    if(temp[2]+1 < count) { q.add(new int[]{nextX, nextY, temp[2] + 1}); }
+                    else if(temp[2]+1 == count) { startPoint.add(new obj(nextX, nextY, count, k)); }
+                } else if(map[nextX][nextY] == '.') {
+                    map[nextX][nextY] = k;
+                    PS[Character.getNumericValue(k)-1]++;
+                    visit[nextX][nextY] = true;
+                    if(temp[2]+1 < count) { q.add(new int[]{nextX, nextY, temp[2] + 1}); }
+                    else if(temp[2]+1 == count) { startPoint.add(new obj(nextX, nextY, count, k)); }
+                }
 
-                map[nextX][nextY] = k;
-                PS[Character.getNumericValue(k)-1]++;
-                visit[nextX][nextY] = true;
-                if(temp[2]+1 < count) { q.add(new int[]{nextX, nextY, temp[2] + 1}); }
-                else if(temp[2]+1 == count) { startPoint.add(new obj(nextX, nextY, count, k)); }
+
             }
         }
     }
@@ -108,12 +115,15 @@ public class AL_16920 {
             line = st.nextToken().toCharArray();
             for(int j=0; j<M; j++) {
                 map[i][j] = line[j];
+                if(map[i][j] == '#') {
+                    visit[i][j] = true;
+                } else if(map[i][j] != '.') {
+                    int temp = Character.getNumericValue(map[i][j]) - 1;
 
-                int temp = Character.getNumericValue(map[i][j]) - 1;
-
-                if(temp >= 0) {
-                    priostartPoint.add(new obj(i, j, S[temp], map[i][j]));
-                    PS[temp]++;
+                    if(temp >= 0) {
+                        priostartPoint.add(new obj(i, j, S[temp], map[i][j]));
+                        PS[temp]++;
+                    }
                 }
             }
         }
@@ -124,6 +134,7 @@ public class AL_16920 {
         while (!startPoint.isEmpty()) {
             obj temp = startPoint.poll();
             bfs(temp.x, temp.y, temp.count, temp.k);
+            visit = new boolean[N][M];
         }
 
         for(int i=0; i<P; i++) {
