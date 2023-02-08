@@ -55,11 +55,13 @@ public class AL_1150 {
             assert temp != null;
             if(arr.contains(temp.start) || arr.contains(temp.end)) {
                 q.add(temp);
+                i--;
                 continue;
             }
             total += temp.length;
+            q.add(temp);
         }
-        while (!q.isEmpty()) pq.add(q.poll());
+        while (!q.isEmpty()) { pq.add(q.poll()); }
 
         return total;
     }
@@ -82,18 +84,24 @@ public class AL_1150 {
             pq.add(new distance(i-1, i, comp[i]-comp[i-1]));
         }
 
-        int startPoint = -1;
-        int endPoint = -1;
+        if(n/2 == k && n%2 == 0) {
+            int total = 0;
+            int size = comp.length;
+            for(int i=0; i<size; i++) {
+                // 수정
+            }
+            System.out.println(total);
+            return;
+        }
 
         distance[] distArr = pq.toArray(new distance[0]);
 
         for(int i=0; i<pq.size(); i++) {
-            distance temp = pq.poll();
+            int temp = count(distArr[i]);
+
+            if(temp < min) min = temp;
         }
 
-        for(int i=0; i<k; i++) {
-            distance temp = pq.poll();
-
-        }
+        System.out.println(min);
     }
 }
