@@ -35,8 +35,8 @@ public class AL_1150 {
 
         @Override
         public int compareTo(distance o) {
-            if(this.length > o.length) return 1;
-            else if(this.length < o.length) return -1;
+            if(this.length > o.getLength()) return 1;
+            else if(this.length < o.getLength()) return -1;
             return 0;
         }
     }
@@ -51,6 +51,10 @@ public class AL_1150 {
         Queue<distance> q = new LinkedList<>();
 
         for(int i=0; i<k-1; i++) {
+            if(pq.size()==0) {
+                while (!q.isEmpty()) { pq.add(q.poll()); }
+                return Integer.MAX_VALUE;
+            }
             distance temp = pq.poll();
             assert temp != null;
             if(arr.contains(temp.start) || arr.contains(temp.end)) {
@@ -59,6 +63,8 @@ public class AL_1150 {
                 continue;
             }
             total += temp.length;
+            arr.add(temp.start);
+            arr.add(temp.end);
             q.add(temp);
         }
         while (!q.isEmpty()) { pq.add(q.poll()); }
@@ -69,6 +75,7 @@ public class AL_1150 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        PriorityQueue<distance> tempQ = new PriorityQueue<>();
 
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
@@ -81,20 +88,28 @@ public class AL_1150 {
             comp[i] = Integer.parseInt(st.nextToken());
             if(i==1)
                 continue;
-            pq.add(new distance(i-1, i, comp[i]-comp[i-1]));
+            tempQ.add(new distance(i-1, i, comp[i]-comp[i-1]));
         }
 
         if(n/2 == k && n%2 == 0) {
             int total = 0;
             int size = comp.length;
-            for(int i=0; i<size; i++) {
-                // 수정
+            for(int i=1; i<size-1; i++) {
+                if(i%2 == 1) {
+                    total += (comp[i+1] - comp[i]);
+                }
             }
             System.out.println(total);
             return;
         }
 
-        distance[] distArr = pq.toArray(new distance[0]);
+        distance[] distArr = new distance[tempQ.size()];
+
+        for(int i=0, size=tempQ.size(); i<size; i++) {
+            distance temp = tempQ.poll();
+            distArr[i] = temp;
+            pq.add(temp);
+        }
 
         for(int i=0; i<pq.size(); i++) {
             int temp = count(distArr[i]);
