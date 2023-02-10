@@ -8,6 +8,7 @@ public class AL_1150 {
     static int[] comp;
     static int min;
     static PriorityQueue<distance> pq = new PriorityQueue<>();
+    static boolean[] visit;
 
     public static class distance implements Comparable<distance> {
         int start;
@@ -42,9 +43,9 @@ public class AL_1150 {
     }
 
     public static int count(distance dis) {
-        ArrayList<Integer> arr = new ArrayList<Integer>();
-        arr.add(dis.start);
-        arr.add(dis.end);
+        visit = new boolean[n+1];
+        visit[dis.start] = true;
+        visit[dis.end] = true;
 
         int total = dis.length;
 
@@ -57,14 +58,14 @@ public class AL_1150 {
             }
             distance temp = pq.poll();
             assert temp != null;
-            if(arr.contains(temp.start) || arr.contains(temp.end)) {
+            if(visit[temp.start] || visit[temp.end]) {
                 q.add(temp);
                 i--;
                 continue;
             }
             total += temp.length;
-            arr.add(temp.start);
-            arr.add(temp.end);
+            visit[temp.start] = true;
+            visit[temp.end] = true;
             q.add(temp);
         }
         while (!q.isEmpty()) { pq.add(q.poll()); }
