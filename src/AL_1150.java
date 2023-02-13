@@ -7,7 +7,6 @@ public class AL_1150 {
     static int n, k;
     static int[] comp;
     static int min;
-    static PriorityQueue<distance> pq = new PriorityQueue<>();
     static boolean[] visit;
 
     public static class distance implements Comparable<distance> {
@@ -42,35 +41,31 @@ public class AL_1150 {
         }
     }
 
-    public static int count(distance dis) {
+    public static int count(distance[] distArr, int num) {
         visit = new boolean[n+1];
-        visit[dis.start] = true;
-        visit[dis.end] = true;
 
-        int total = dis.length;
+        visit[distArr[num].start] = true;
+        visit[distArr[num].end] = true;
 
-        Queue<distance> q = new LinkedList<>();
+        int total2 = distArr[num].length;
 
-        for(int i=0; i<k-1; i++) {
-            if(pq.size()==0) {
-                while (!q.isEmpty()) { pq.add(q.poll()); }
-                return Integer.MAX_VALUE;
+        int count = 1;
+
+        for(int i=0; i<distArr.length; i++) {
+            if(count == k) {
+                return total2;
             }
-            distance temp = pq.poll();
-            assert temp != null;
-            if(visit[temp.start] || visit[temp.end]) {
-                q.add(temp);
-                i--;
+
+            if(visit[distArr[i].start] || visit[distArr[i].end]) {
                 continue;
             }
-            total += temp.length;
-            visit[temp.start] = true;
-            visit[temp.end] = true;
-            q.add(temp);
+            total2 += distArr[i].length;
+            count++;
+            visit[distArr[i].start] = true;
+            visit[distArr[i].end] = true;
         }
-        while (!q.isEmpty()) { pq.add(q.poll()); }
 
-        return total;
+        return Integer.MAX_VALUE;
     }
 
     public static void main(String[] args) throws IOException {
@@ -109,11 +104,10 @@ public class AL_1150 {
         for(int i=0, size=tempQ.size(); i<size; i++) {
             distance temp = tempQ.poll();
             distArr[i] = temp;
-            pq.add(temp);
         }
 
-        for(int i=0; i<pq.size(); i++) {
-            int temp = count(distArr[i]);
+        for(int i=0; i<distArr.length; i++) {
+            int temp = count(distArr, i);
 
             if(temp < min) min = temp;
         }
