@@ -9,6 +9,8 @@ public class AL_1150 {
     static int min;
     static boolean[] visit;
 
+    static PriorityQueue<distance2> pq = new PriorityQueue<>();
+
     public static class distance implements Comparable<distance> {
         int start;
         int end;
@@ -18,20 +20,36 @@ public class AL_1150 {
             return length;
         }
 
-        public int getStart() {
-            return start;
-        }
-
-        public int getEnd() {
-            return end;
-        }
-
         public distance(int start, int end, int length) {
             this.start = start;
             this.end = end;
             this.length = length;
         }
 
+        @Override
+        public int compareTo(distance o) {
+            if(this.length > o.getLength()) return 1;
+            else if(this.length < o.getLength()) return -1;
+            return 0;
+        }
+    }
+
+    public static class distance2 implements Comparable<distance> {
+        int start;
+        int end;
+        int length;
+        int count;
+
+        public int getLength() {
+            return length;
+        }
+
+        public distance2(int start, int end, int length, int count) {
+            this.start = start;
+            this.end = end;
+            this.length = length;
+            this.count = count;
+        }
 
         @Override
         public int compareTo(distance o) {
@@ -71,20 +89,21 @@ public class AL_1150 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        PriorityQueue<distance> tempQ = new PriorityQueue<>();
 
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
 
         comp = new int[n+1];
         min = Integer.MAX_VALUE;
+        distance[] distArr = new distance[n-1];
 
         for(int i=1; i<=n; i++) {
             st = new StringTokenizer(br.readLine());
             comp[i] = Integer.parseInt(st.nextToken());
             if(i==1)
                 continue;
-            tempQ.add(new distance(i-1, i, comp[i]-comp[i-1]));
+            distArr[i-2] = new distance(i-1, i, comp[i]-comp[i-1]);
+            pq.add(new distance2(i-1, i, comp[i]-comp[i-1], 1))
         }
 
         if(n/2 == k && n%2 == 0) {
@@ -99,18 +118,23 @@ public class AL_1150 {
             return;
         }
 
-        distance[] distArr = new distance[tempQ.size()];
-
-        for(int i=0, size=tempQ.size(); i<size; i++) {
-            distance temp = tempQ.poll();
-            distArr[i] = temp;
-        }
+        Arrays.sort(distArr);
 
         for(int i=0; i<distArr.length; i++) {
             int temp = count(distArr, i);
 
             if(temp < min) min = temp;
         }
+
+        int maa = Integer.MAX_VALUE;
+
+        while (!pq.isEmpty()) {
+            distance2 temp = pq.poll();
+
+
+        }
+
+
 
         System.out.println(min);
     }
