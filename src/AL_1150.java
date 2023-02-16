@@ -5,85 +5,29 @@ import java.util.*;
 
 public class AL_1150 {
     static int n, k;
-    static int[] comp;
-    static int min;
-    static boolean[] visit;
+    static data[] comps;
 
-    static PriorityQueue<distance2> pq = new PriorityQueue<>();
-
-    public static class distance implements Comparable<distance> {
-        int start;
-        int end;
+    public static class data implements Comparable<data> {
         int length;
+        int left;
+        int right;
 
         public int getLength() {
             return length;
         }
 
-        public distance(int start, int end, int length) {
-            this.start = start;
-            this.end = end;
+        public data(int length, int left, int right) {
+            this.left = left;
             this.length = length;
+            this.right = right;
         }
 
         @Override
-        public int compareTo(distance o) {
+        public int compareTo(data o) {
             if(this.length > o.getLength()) return 1;
             else if(this.length < o.getLength()) return -1;
             return 0;
         }
-    }
-
-    public static class distance2 implements Comparable<distance> {
-        int start;
-        int end;
-        int length;
-        int count;
-
-        public int getLength() {
-            return length;
-        }
-
-        public distance2(int start, int end, int length, int count) {
-            this.start = start;
-            this.end = end;
-            this.length = length;
-            this.count = count;
-        }
-
-        @Override
-        public int compareTo(distance o) {
-            if(this.length > o.getLength()) return 1;
-            else if(this.length < o.getLength()) return -1;
-            return 0;
-        }
-    }
-
-    public static int count(distance[] distArr, int num) {
-        visit = new boolean[n+1];
-
-        visit[distArr[num].start] = true;
-        visit[distArr[num].end] = true;
-
-        int total2 = distArr[num].length;
-
-        int count = 1;
-
-        for(int i=0; i<distArr.length; i++) {
-            if(count == k) {
-                return total2;
-            }
-
-            if(visit[distArr[i].start] || visit[distArr[i].end]) {
-                continue;
-            }
-            total2 += distArr[i].length;
-            count++;
-            visit[distArr[i].start] = true;
-            visit[distArr[i].end] = true;
-        }
-
-        return Integer.MAX_VALUE;
     }
 
     public static void main(String[] args) throws IOException {
@@ -93,49 +37,52 @@ public class AL_1150 {
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
 
-        comp = new int[n+1];
-        min = Integer.MAX_VALUE;
-        distance[] distArr = new distance[n-1];
+        comps = new data[n+2];
+        PriorityQueue<data> pq = new PriorityQueue<>();
 
-        for(int i=1; i<=n; i++) {
+        int s1, s2;
+
+        st = new StringTokenizer(br.readLine());
+        s1 = Integer.parseInt(st.nextToken());
+
+        for(int i=1; i<n; i++) {
             st = new StringTokenizer(br.readLine());
-            comp[i] = Integer.parseInt(st.nextToken());
-            if(i==1)
-                continue;
-            distArr[i-2] = new distance(i-1, i, comp[i]-comp[i-1]);
-            pq.add(new distance2(i-1, i, comp[i]-comp[i-1], 1))
-        }
+            s2 = Integer.parseInt(st.nextToken());
 
-        if(n/2 == k && n%2 == 0) {
-            int total = 0;
-            int size = comp.length;
-            for(int i=1; i<size-1; i++) {
-                if(i%2 == 1) {
-                    total += (comp[i+1] - comp[i]);
-                }
+            comps[i] = new data(s2-s1, i-1, i+1);
+
+            pq.add(new data(comps[i].length, i, i+1));
+
+            s1 = s2;
+        }
+        comps[n] = new data(0, n-1, n+1);
+        comps[n+1] = new data(0, n, n+2);
+        comps[0] = new data(0, -1, 1);
+
+
+        int ans = 0;
+
+        for(int i=0; i<k;) {
+            data t = pq.poll();
+            assert t != null;
+            int tl = t.left, tr = t.right;
+            if(tl > 0 && tr <= n && tr == comps[tl].right && tl == comps[tr].left) {
+                ans += t.length;
+                if(++i >= k) break;
+
+                int nl = comps[tl].left, nr = comps[tr].right;
+                t.left = nl;
+                t.right = nr;
+
+                comps[nl].length = comps[nl].length + comps[tr].length - t.length;
+                t.length = comps[nl].length;
+
+                pq.add(t);
+                comps[nl].right = nr;
+                comps[nr].left = nl;
             }
-            System.out.println(total);
-            return;
         }
 
-        Arrays.sort(distArr);
-
-        for(int i=0; i<distArr.length; i++) {
-            int temp = count(distArr, i);
-
-            if(temp < min) min = temp;
-        }
-
-        int maa = Integer.MAX_VALUE;
-
-        while (!pq.isEmpty()) {
-            distance2 temp = pq.poll();
-
-
-        }
-
-
-
-        System.out.println(min);
+        System.out.println(ans);
     }
 }
