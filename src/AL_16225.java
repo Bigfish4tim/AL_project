@@ -8,12 +8,20 @@ public class AL_16225 {
     static int[] a;
     static int[] b;
     static PriorityQueue<data> pq = new PriorityQueue<>();
+//    static PriorityQueue<data> pq2 = new PriorityQueue<>(new Comparator<data>() {
+//        @Override
+//        public int compare(data o1, data o2) {
+//            return Integer.compare(o2.getA(), o1.getA());
+//        }
+//    });
+    static PriorityQueue<Integer> pq3 = new PriorityQueue<>(Collections.reverseOrder());
     static int ans = 0;
 
     public static class data implements Comparable<data> {
         int a;
         int b;
 
+        public int getA() {return a;}
         public int getB() {return b;}
 
         public data(int a, int b) {
@@ -54,7 +62,10 @@ public class AL_16225 {
 
             assert temp != null;
             assert temp2 != null;
-            ans += Math.max(temp.a, temp2.a);
+            pq3.add(temp.a);
+            pq3.add(temp2.a);
+
+            ans += Objects.requireNonNull(pq3.poll());
 
             count++;
         }
