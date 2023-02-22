@@ -5,8 +5,8 @@ import java.util.*;
 
 public class AL_16225 {
     static int n;
-    static int[] a;
-    static int[] b;
+    static long[] a;
+    static long[] b;
     static PriorityQueue<data> pq = new PriorityQueue<>();
 //    static PriorityQueue<data> pq2 = new PriorityQueue<>(new Comparator<data>() {
 //        @Override
@@ -14,17 +14,17 @@ public class AL_16225 {
 //            return Integer.compare(o2.getA(), o1.getA());
 //        }
 //    });
-    static PriorityQueue<Integer> pq3 = new PriorityQueue<>(Collections.reverseOrder());
+    static PriorityQueue<Long> pq2 = new PriorityQueue<>(Collections.reverseOrder());
     static int ans = 0;
 
     public static class data implements Comparable<data> {
-        int a;
-        int b;
+        long a;
+        long b;
 
-        public int getA() {return a;}
-        public int getB() {return b;}
+        public long getA() {return a;}
+        public long getB() {return b;}
 
-        public data(int a, int b) {
+        public data(long a, long b) {
             this.a = a;
             this.b = b;
         }
@@ -42,8 +42,8 @@ public class AL_16225 {
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         n = Integer.parseInt(st.nextToken());
-        a = new int[n];
-        b = new int[n];
+        a = new long[n];
+        b = new long[n];
 
         st = new StringTokenizer(br.readLine());
 
@@ -62,10 +62,10 @@ public class AL_16225 {
 
             assert temp != null;
             assert temp2 != null;
-            pq3.add(temp.a);
-            pq3.add(temp2.a);
+            pq2.add(temp.a);
+            pq2.add(temp2.a);
 
-            ans += Objects.requireNonNull(pq3.poll());
+            ans += Objects.requireNonNull(pq2.poll());
 
             count++;
         }
