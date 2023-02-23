@@ -5,28 +5,28 @@ import java.util.*;
 
 public class AL_13323 {
     static int n;
-    static int[] a, b;
+    static PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        ArrayList<Integer> arr = new ArrayList<>();
 
         n = Integer.parseInt(st.nextToken());
-        a = new int[n];
-        b = new int[n];
 
+        int ans = 0;
         st = new StringTokenizer(br.readLine());
-        for(int i=0; i<n; i++) a[i] = Integer.parseInt(st.nextToken());
 
-        boolean isDecreasing = true;
-        boolean isIncreasing = true;
+        for(int i=0; i<n; i++) {
+            int temp = Integer.parseInt(st.nextToken());
+            temp -= i;
+            pq.add(temp);
 
-
-        arr.add(a[0]);
-
-        for(int i=0; i<n-1; i++) {
-
+            if(!pq.isEmpty() && pq.peek() > temp) {
+                ans += pq.poll() - temp;
+                pq.add(temp);
+            }
         }
+
+        System.out.println(ans);
     }
 }
