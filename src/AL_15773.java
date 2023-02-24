@@ -22,8 +22,8 @@ public class AL_15773 {
 
         @Override
         public int compareTo(data o) {
-            if(this.l < o.getL()) return 1;
-            else if(this.l > o.getL()) return -1;
+            if(this.l > o.getL()) return 1;
+            else if(this.l < o.getL()) return -1;
             return 0;
         }
     }
@@ -40,6 +40,11 @@ public class AL_15773 {
             int tempD = Integer.parseInt(st.nextToken());
 
             pq.add(new data(tempL, tempD));
+        }
+
+        while (!pq.isEmpty()){
+            data temp = pq.poll();
+            System.out.println(temp.l + " " + temp.d);
         }
 
     }

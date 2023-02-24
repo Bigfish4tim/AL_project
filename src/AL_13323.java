@@ -13,7 +13,7 @@ public class AL_13323 {
 
         n = Integer.parseInt(st.nextToken());
 
-        int ans = 0;
+        long ans = 0;
         st = new StringTokenizer(br.readLine());
 
         for(int i=0; i<n; i++) {
