@@ -4,6 +4,8 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class AL_13323 {
+
+
     static int n;
     static PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
 
