@@ -5,15 +5,22 @@ import java.util.*;
 
 public class AL_15773 {
     static int n;
+    static dataList[] pqList;
     static PriorityQueue<data> pq = new PriorityQueue<>();
+
+    public static class dataList {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        public dataList(PriorityQueue<Integer> pq) {
+            this.pq = pq;
+        }
+    }
 
     public static class data implements Comparable<data> {
         int l;
         int d;
 
-        public int getL() {
-            return l;
-        }
+        public int getL() { return l; }
 
         public data(int l, int d) {
             this.l = l;
@@ -32,7 +39,11 @@ public class AL_15773 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
+        ArrayList<data> arr = new ArrayList<>();
+
         n = Integer.parseInt(st.nextToken());
+
+        pqList = new dataList[n+1];
 
         for(int i=0; i<n; i++) {
             st = new StringTokenizer(br.readLine());
@@ -40,12 +51,9 @@ public class AL_15773 {
             int tempD = Integer.parseInt(st.nextToken());
 
             pq.add(new data(tempL, tempD));
+            pqList[tempL].pq.add(tempD);
         }
 
-        while (!pq.isEmpty()){
-            data temp = pq.poll();
-            System.out.println(temp.l + " " + temp.d);
-        }
 
     }
 }
