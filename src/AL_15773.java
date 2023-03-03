@@ -5,17 +5,6 @@ import java.util.*;
 
 public class AL_15773 {
     static int n;
-    static dataList[] pqList;
-    static PriorityQueue<data> pq = new PriorityQueue<>();
-
-    public static class dataList {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-
-        public dataList(PriorityQueue<Integer> pq) {
-            this.pq = pq;
-        }
-    }
-
     public static class data implements Comparable<data> {
         int l;
         int d;
@@ -39,21 +28,73 @@ public class AL_15773 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
+        PriorityQueue<data> pq1 = new PriorityQueue<>();
+
         ArrayList<data> arr = new ArrayList<>();
 
         n = Integer.parseInt(st.nextToken());
 
-        pqList = new dataList[n+1];
+        boolean[] visit = new boolean[n];
 
         for(int i=0; i<n; i++) {
             st = new StringTokenizer(br.readLine());
             int tempL = Integer.parseInt(st.nextToken());
             int tempD = Integer.parseInt(st.nextToken());
 
-            pq.add(new data(tempL, tempD));
-            pqList[tempL].pq.add(tempD);
+            arr.add(new data(tempL, tempD));
+        }
+        Collections.sort(arr);
+
+        int pos = 0;
+        int cnt = 0;
+
+//        Iterator<data> iter = arr.iterator();
+//        while (iter.hasNext()) {
+//            data temp = iter.next();
+//            if(temp.l >= pos) {
+//                pos += temp.d;
+//                pq1.add(temp);
+//                iter.remove();
+//            }
+//        }
+
+        Iterator<data> iter = arr.iterator();
+        while (iter.hasNext()) {
+            data temp = iter.next();
+            if(temp.l >= pos) {
+                pos += temp.d;
+                pq1.add(temp);
+                iter.remove();
+            }
         }
 
+        while (!arr.isEmpty()) {
+            PriorityQueue<data> pq2 = new PriorityQueue<>();
+            pq2.add(arr.remove(0));
+            assert pq2.peek() != null;
+            pos = pq2.peek().l;
 
+
+
+            Iterator<data> tempIter = arr.iterator();
+            while (iter.hasNext()) {
+                data temp = tempIter.next();
+                if (temp.l >= pos) {
+                    pos += temp.d;;
+                    pq2.add(temp);
+                    tempIter.remove();
+                }
+            }
+
+            Iterator<data> iter = arr.iterator();
+            while (iter.hasNext()) {
+                data temp = iter.next();
+                if(temp.l >= pos) {
+                    pos += temp.d;
+                    pq1.add(temp);
+                    iter.remove();
+                }
+            }
+        }
     }
 }
