@@ -68,13 +68,50 @@ public class AL_15773 {
             }
         }
 
+        int count = pq1.size();
+
+        int i = 0;
+
+        while (!arr.isEmpty()) {
+            PriorityQueue<data> pq2 = new PriorityQueue<>();
+
+            pq1.add(arr.remove(0));
+
+
+
+            Iterator<data> tempIter = arr.iterator();
+            while (iter.hasNext()) {
+                data temp = iter.next();
+                if (temp.l >= pos) {
+                    pos += temp.d;
+                    pq1.add(temp);
+                    iter.remove();
+
+                    assert pq1.peek() != null;
+                    if(pq1.peek().l <= temp.l) {
+
+                    } else {
+
+                    }
+                }
+            }
+
+        }
+
         while (!arr.isEmpty()) {
             PriorityQueue<data> pq2 = new PriorityQueue<>();
             pq2.add(arr.remove(0));
             assert pq2.peek() != null;
             pos = pq2.peek().l;
 
-
+            assert pq1.peek() != null;
+            if(pq1.peek().l <= arr.get(0).l) {
+                if(pq1.peek().l <= pq2.peek().l) {
+                    if(pq1.peek().d <= pq2.peek().l) {
+                        pq2.add(pq1.poll());
+                    }
+                }
+            }
 
             Iterator<data> tempIter = arr.iterator();
             while (iter.hasNext()) {
