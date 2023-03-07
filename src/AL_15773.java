@@ -32,6 +32,8 @@ public class AL_15773 {
 
         ArrayList<data> arr = new ArrayList<>();
 
+        ArrayList<data> subArr = new ArrayList<>();
+
         n = Integer.parseInt(st.nextToken());
 
         boolean[] visit = new boolean[n];
@@ -63,14 +65,13 @@ public class AL_15773 {
             data temp = iter.next();
             if(temp.l >= pos) {
                 pos += temp.d;
-                pq1.add(temp);
+                subArr.add(temp);
                 iter.remove();
             }
         }
 
-        int count = pq1.size();
-
-        int i = 0;
+        int count = subArr.size();
+        Collections.sort(subArr);
 
         while (!arr.isEmpty()) {
             PriorityQueue<data> pq2 = new PriorityQueue<>();
@@ -82,16 +83,17 @@ public class AL_15773 {
             Iterator<data> tempIter = arr.iterator();
             while (iter.hasNext()) {
                 data temp = iter.next();
-                if (temp.l >= pos) {
-                    pos += temp.d;
-                    pq1.add(temp);
-                    iter.remove();
+                int i=0;
+                pos = 0;
 
-                    assert pq1.peek() != null;
-                    if(pq1.peek().l <= temp.l) {
-
-                    } else {
-
+                if (subArr.get(0).l <= temp.l) {
+                    while (subArr.get(i).l <= temp.l) {
+                        pos += subArr.get(i).d;
+                        i++;
+                        if (pos > temp.d) {
+                            subArr.remove(i);
+                            break;
+                        }
                     }
                 }
             }
