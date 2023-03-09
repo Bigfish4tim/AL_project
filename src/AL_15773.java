@@ -55,18 +55,19 @@ public class AL_15773 {
 //            data temp = iter.next();
 //            if(temp.l >= pos) {
 //                pos += temp.d;
-//                pq1.add(temp);
+//                subArr.add(temp);
 //                iter.remove();
 //            }
 //        }
 
-        Iterator<data> iter = arr.iterator();
-        while (iter.hasNext()) {
-            data temp = iter.next();
+        int size = arr.size();
+        for(int i=0; i<size; i++) {
+            data temp = arr.get(i);
             if(temp.l >= pos) {
                 pos += temp.d;
-                subArr.add(temp);
-                iter.remove();
+                subArr.add(arr.remove(i));
+                size--;
+                i--;
             }
         }
 
@@ -74,66 +75,71 @@ public class AL_15773 {
         Collections.sort(subArr);
 
         while (!arr.isEmpty()) {
-            PriorityQueue<data> pq2 = new PriorityQueue<>();
-
-            pq1.add(arr.remove(0));
-
-
-
-            Iterator<data> tempIter = arr.iterator();
-            while (iter.hasNext()) {
-                data temp = iter.next();
-                int i=0;
+            size = arr.size();
+            for (int i=0; i<size; i++) {
+                data temp = arr.get(i);
+                int j=0;
                 pos = 0;
 
-                if (subArr.get(0).l <= temp.l) {
-                    while (subArr.get(i).l <= temp.l) {
-                        pos += subArr.get(i).d;
-                        i++;
-                        if (pos > temp.d) {
-                            subArr.remove(i);
+                if(subArr.get(j).l <= temp.l) {
+                    while (subArr.get(j).l <= temp.l) {
+                        pos += subArr.get(j).d;
+                        j++;
+                        if (pos > temp.l) {
+                            j = j-1;
+                            pos -= subArr.remove(j).d;
                             break;
                         }
                     }
-                }
-            }
 
-        }
-
-        while (!arr.isEmpty()) {
-            PriorityQueue<data> pq2 = new PriorityQueue<>();
-            pq2.add(arr.remove(0));
-            assert pq2.peek() != null;
-            pos = pq2.peek().l;
-
-            assert pq1.peek() != null;
-            if(pq1.peek().l <= arr.get(0).l) {
-                if(pq1.peek().l <= pq2.peek().l) {
-                    if(pq1.peek().d <= pq2.peek().l) {
-                        pq2.add(pq1.poll());
+                    while (subArr.size() != j) {
+                        data temp2 = subArr.remove(j);
+//                        arr.add(subArr.remove(j));
+                        arr.add(temp2);
                     }
                 }
-            }
 
-            Iterator<data> tempIter = arr.iterator();
-            while (iter.hasNext()) {
-                data temp = tempIter.next();
+                Collections.sort(arr);
+
+                size = arr.size();
                 if (temp.l >= pos) {
-                    pos += temp.d;;
-                    pq2.add(temp);
-                    tempIter.remove();
-                }
-            }
-
-            Iterator<data> iter = arr.iterator();
-            while (iter.hasNext()) {
-                data temp = iter.next();
-                if(temp.l >= pos) {
                     pos += temp.d;
-                    pq1.add(temp);
-                    iter.remove();
+                    subArr.add(arr.remove(i));
+                    size--;
+                    i--;
                 }
             }
         }
+
+//        while (!arr.isEmpty()) {
+//            Iterator<data> iter = arr.iterator();
+//            while (iter.hasNext()) {
+//                data temp = iter.next();
+//                int i=0;
+//                pos = 0;
+//
+//                while (subArr.get(i).l <= temp.l) {
+//                    pos += subArr.get(i).d;
+//                    i++;
+//                    if (pos > temp.d) {
+//                        pos -= subArr.remove(i).d;
+//                        i = i-1;
+//                        break;
+//                    }
+//                }
+//
+//                while (subArr.size() != i) {
+//                    arr.add(subArr.remove(i));
+//                }
+//
+//                Collections.sort(arr);
+//
+//                if(temp.l >= pos) {
+//                    pos += temp.d;
+//                    subArr.add(temp);
+//                    iter.remove();
+//                }
+//            }
+//        }
     }
 }
