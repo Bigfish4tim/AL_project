@@ -5,13 +5,14 @@ import java.util.*;
 
 public class AL_15773 {
     static int n;
+    static ArrayList<data> arr = new ArrayList<>();
     public static class data implements Comparable<data> {
-        int l;
+        long l;
         int d;
 
-        public int getL() { return l; }
+        public long getL() { return l; }
 
-        public data(int l, int d) {
+        public data(long l, int d) {
             this.l = l;
             this.d = d;
         }
@@ -24,41 +25,47 @@ public class AL_15773 {
         }
     }
 
+    public static void nextSort() {
+        // d 기준으로 정렬하는 method
+
+        PriorityQueue<data> pq = new PriorityQueue<>(new Comparator<data>() {
+            @Override
+            public int compare(data o1, data o2) {
+                return Integer.compare(o1.d, o2.d);
+            }
+        });
+
+        for(int i=0; i<arr.size()-1; i++) {
+            if(arr.get(i) == arr.get(i+1)) {
+                pq.add(arr.get(i));
+            } else {
+                pq.add(arr.get(i));
+
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
-        PriorityQueue<data> pq1 = new PriorityQueue<>();
-
-        ArrayList<data> arr = new ArrayList<>();
 
         ArrayList<data> subArr = new ArrayList<>();
 
         n = Integer.parseInt(st.nextToken());
 
-        boolean[] visit = new boolean[n];
-
         for(int i=0; i<n; i++) {
             st = new StringTokenizer(br.readLine());
-            int tempL = Integer.parseInt(st.nextToken());
+            long tempL = Long.parseLong(st.nextToken());
             int tempD = Integer.parseInt(st.nextToken());
 
             arr.add(new data(tempL, tempD));
         }
         Collections.sort(arr);
 
-        int pos = 0;
-        int cnt = 0;
 
-//        Iterator<data> iter = arr.iterator();
-//        while (iter.hasNext()) {
-//            data temp = iter.next();
-//            if(temp.l >= pos) {
-//                pos += temp.d;
-//                subArr.add(temp);
-//                iter.remove();
-//            }
-//        }
+        nextSort();
+
+        int pos = 0;
 
         int size = arr.size();
         for(int i=0; i<size; i++) {
@@ -72,34 +79,40 @@ public class AL_15773 {
         }
 
         int count = subArr.size();
-        Collections.sort(subArr);
+
+        boolean trig = true;
 
         while (!arr.isEmpty()) {
             size = arr.size();
             for (int i=0; i<size; i++) {
                 data temp = arr.get(i);
-                int j=0;
-                pos = 0;
 
-                if(subArr.get(j).l <= temp.l) {
+                if(trig) {
+                    pos = 0;
+                    int j=0;
                     while (subArr.get(j).l <= temp.l) {
                         pos += subArr.get(j).d;
                         j++;
                         if (pos > temp.l) {
                             j = j-1;
-                            pos -= subArr.remove(j).d;
-                            break;
+                            if (temp.l == subArr.get(j).l && temp.d > subArr.get(j).d) {
+                                pos -= subArr.get(j).d;
+                                arr.remove(i);
+                                temp = arr.get(i);
+                            } else {
+                                pos -= subArr.remove(j).d;
+                            }
+                            if (subArr.size() == j) break;
                         }
                     }
 
                     while (subArr.size() != j) {
                         data temp2 = subArr.remove(j);
-//                        arr.add(subArr.remove(j));
                         arr.add(temp2);
                     }
+                    trig = false;
+                    Collections.sort(arr);
                 }
-
-                Collections.sort(arr);
 
                 size = arr.size();
                 if (temp.l >= pos) {
@@ -109,37 +122,11 @@ public class AL_15773 {
                     i--;
                 }
             }
+            trig = true;
+            if (count < subArr.size()) {
+                count = subArr.size();
+            }
         }
-
-//        while (!arr.isEmpty()) {
-//            Iterator<data> iter = arr.iterator();
-//            while (iter.hasNext()) {
-//                data temp = iter.next();
-//                int i=0;
-//                pos = 0;
-//
-//                while (subArr.get(i).l <= temp.l) {
-//                    pos += subArr.get(i).d;
-//                    i++;
-//                    if (pos > temp.d) {
-//                        pos -= subArr.remove(i).d;
-//                        i = i-1;
-//                        break;
-//                    }
-//                }
-//
-//                while (subArr.size() != i) {
-//                    arr.add(subArr.remove(i));
-//                }
-//
-//                Collections.sort(arr);
-//
-//                if(temp.l >= pos) {
-//                    pos += temp.d;
-//                    subArr.add(temp);
-//                    iter.remove();
-//                }
-//            }
-//        }
+        System.out.println(count);
     }
 }
