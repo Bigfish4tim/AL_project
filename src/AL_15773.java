@@ -11,6 +11,7 @@ public class AL_15773 {
         int d;
 
         public long getL() { return l; }
+        public int getD() { return d; }
 
         public data(long l, int d) {
             this.l = l;
@@ -21,29 +22,12 @@ public class AL_15773 {
         public int compareTo(data o) {
             if(this.l > o.getL()) return 1;
             else if(this.l < o.getL()) return -1;
-            return 0;
-        }
-    }
-
-    public static void nextSort() {
-        // d 기준으로 정렬하는 method
-
-        PriorityQueue<data> pq = new PriorityQueue<>(new Comparator<data>() {
-            @Override
-            public int compare(data o1, data o2) {
-                return Integer.compare(o1.d, o2.d);
-            }
-        });
-
-        for(int i=0; i<arr.size()-1; i++) {
-            if(arr.get(i) == arr.get(i+1)) {
-                pq.add(arr.get(i));
-            } else {
-                pq.add(arr.get(i));
-
+            else {
+                return Integer.compare(this.d, o.getD());
             }
         }
     }
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -61,9 +45,6 @@ public class AL_15773 {
             arr.add(new data(tempL, tempD));
         }
         Collections.sort(arr);
-
-
-        nextSort();
 
         int pos = 0;
 
