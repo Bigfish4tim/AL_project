@@ -33,6 +33,8 @@ public class AL_15773 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
+        PriorityQueue<data> pq = new PriorityQueue<>();
+
         ArrayList<data> subArr = new ArrayList<>();
 
         n = Integer.parseInt(st.nextToken());
@@ -82,6 +84,7 @@ public class AL_15773 {
                                 temp = arr.get(i);
                             } else {
                                 pos -= subArr.remove(j).d;
+                                pq.add(subArr.remove(j));
                             }
                             if (subArr.size() == j) break;
                         }
