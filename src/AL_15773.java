@@ -84,7 +84,6 @@ public class AL_15773 {
                                 temp = arr.get(i);
                             } else {
                                 pos -= subArr.remove(j).d;
-                                pq.add(subArr.remove(j));
                             }
                             if (subArr.size() == j) break;
                         }
