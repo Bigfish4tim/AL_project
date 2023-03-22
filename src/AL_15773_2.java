@@ -28,13 +28,27 @@ public class AL_15773_2 {
         }
     }
 
-    public static void starter(int start, int sum, int cnt) {
-//        if(count < cnt) count = cnt;
+    public static void starter(int start, int sum, int cnt, data before) {
+        if(count < cnt) count = cnt;
 
+        data bef;
+
+        if(start == arr.size() && before != null) {
+            if(sum <= before.l) starter(start, sum+before.d, cnt+1, null);
+        }
         for(int i=start; i<arr.size(); i++) {
             if(arr.size() - i < count - cnt) break;
+            if(before != null) { bef = before; }
+            else if(i==start) { bef = null; }
+            else { bef = arr.get(i-1); }
+
             data temp = arr.get(i);
-            if(sum <= temp.l) starter(i+1, sum+temp.d, cnt+1);
+            if(sum <= temp.l) {
+                starter(i+1, sum+temp.d, cnt+1, bef);
+            }
+            if(before != null && sum <= before.l) {
+                starter(i, sum+ before.d, cnt+1, null);
+            }
         }
     }
 
@@ -52,7 +66,7 @@ public class AL_15773_2 {
         }
         Collections.sort(arr);
 
-        starter(0, 0, 0);
+        starter(0, 0, 0, null);
 
         System.out.println(count);
     }
