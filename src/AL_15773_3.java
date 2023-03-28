@@ -58,25 +58,9 @@ public class AL_15773_3 {
         }
         Arrays.sort(dataArr);
 
-//        starter(0,0,0);
+        starter(0,0,0);
 
-        int cnt = 0;
-        int sum = 0;
-        for(int i=0; i<n; i++) {
+        System.out.println(count);
 
-            if(n-i <= cnt) break;
-            sum = 0;
-            cnt = 0;
-            for(int j=i; j<n; j++) {
-                if(sum <= dataArr[j].l) {
-                    cnt++;
-                    sum += dataArr[j].d;
-                }
-            }
-        }
-
-//        System.out.println(count);
-
-        System.out.println(cnt);
     }
 }
