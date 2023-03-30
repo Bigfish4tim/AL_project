@@ -7,6 +7,8 @@ public class AL_15773_3 {
     static int n;
     static int count;
     static data[] dataArr;
+    static boolean[] visit;
+    static ArrayList<data> list = new ArrayList<>();
 
     public static class data implements Comparable<data> {
         long l;
@@ -25,6 +27,22 @@ public class AL_15773_3 {
             if(this.l+this.d > o.getL()+o.getD()) return 1;
             else if(this.l+this.d < o.getL()+o.getD()) return -1;
             else return Long.compare(this.l, o.getL());
+        }
+    }
+
+    public static void step() {
+        int sum = 0;
+        while (!list.isEmpty()) {
+            for(int i=0; i<list.size(); i++) {
+                data temp = list.remove(i);
+                data temp2;
+                int tempSum = sum + temp.d;
+                int cnt = 0;
+                for(int j=0; j< list.size(); i++) {
+                    if(list.get(j).l > tempSum) cnt++;
+                }
+
+            }
         }
     }
 
@@ -49,16 +67,23 @@ public class AL_15773_3 {
         n = Integer.parseInt(st.nextToken());
 
         dataArr = new data[n];
+        visit = new boolean[n];
+
 
         for(int i=0; i<n; i++) {
             st = new StringTokenizer(br.readLine());
             long tempL = Long.parseLong(st.nextToken());
             int tempD = Integer.parseInt(st.nextToken());
-            dataArr[i] = new data(tempL, tempD);
+//            dataArr[i] = new data(tempL, tempD);
+            list.add(new data(tempL, tempD));
         }
-        Arrays.sort(dataArr);
 
-        starter(0,0,0);
+//        Arrays.sort(dataArr);
+//
+//        starter(0,0,0);
+
+        list.sort(null);
+
 
         System.out.println(count);
 
