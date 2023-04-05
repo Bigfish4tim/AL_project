@@ -7,33 +7,30 @@ public class AL_15773_3 {
     static int n;
     static int count;
     static data[] dataArr;
-    static int[] dp;
-    static PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+    static PriorityQueue<Long> pq = new PriorityQueue<>(Collections.reverseOrder());
 
     public static class data implements Comparable<data> {
         long l;
-        int d;
-        long sum;
+        long d;
 
+        public long getD() { return d; }
         public long getL() { return l; }
-        public long getSum() {return sum;}
 
-        public data(long l, int d) {
+        public data(long l, long d) {
             this.l = l;
             this.d = d;
-            this.sum = l+d;
         }
 
         @Override
         public int compareTo(data o) {
-            if(this.sum > o.getSum()) return 1;
-            else if(this.sum < o.getSum()) return -1;
+            if(this.l+this.d > o.getD()+o.getL()) return 1;
+            else if(this.l+this.d < o.getD()+o.getL()) return -1;
             else return Long.compare(this.l, o.getL());
         }
     }
 
     public static int starter2() {
-        int sum = 0;
+        long sum = 0;
         int count = 0;
         for(int i=0; i<n; i++) {
             if (sum <= dataArr[i].l) {
@@ -41,8 +38,7 @@ public class AL_15773_3 {
                 pq.add(dataArr[i].d);
                 count++;
             } else if (dataArr[i].d < pq.peek()) {
-                sum -= pq.poll();
-                sum += dataArr[i].d;
+                sum = sum - pq.poll() + dataArr[i].d;
             }
         }
 
@@ -56,13 +52,11 @@ public class AL_15773_3 {
         n = Integer.parseInt(st.nextToken());
 
         dataArr = new data[n];
-        dp = new int[n];
-        pq.add(0);
 
         for(int i=0; i<n; i++) {
             st = new StringTokenizer(br.readLine());
             long tempL = Long.parseLong(st.nextToken());
-            int tempD = Integer.parseInt(st.nextToken());
+            long tempD = Long.parseLong(st.nextToken());
             dataArr[i] = new data(tempL, tempD);
         }
         Arrays.sort(dataArr);
