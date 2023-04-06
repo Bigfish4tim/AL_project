@@ -8,6 +8,7 @@ public class AL_15773_3 {
     static int count;
     static data[] dataArr;
     static PriorityQueue<Long> pq = new PriorityQueue<>(Collections.reverseOrder());
+    static int[][] dp;
 
     public static class data implements Comparable<data> {
         long l;
@@ -51,6 +52,7 @@ public class AL_15773_3 {
 
         n = Integer.parseInt(st.nextToken());
 
+        dp = new int[n][n];
         dataArr = new data[n];
 
         for(int i=0; i<n; i++) {
