@@ -23,6 +23,46 @@ public class AL_10254 {
         else    return 0;
     }
 
+    public static int dist(point p1, point p2) {
+        int dx = p1.x - p2.x;
+        int dy = p1.y - p2.y;
+        return (dx*dx + dy*dy);
+    }
+
+    static point[] rotatingCalipers(ArrayList<point> convexHull) {
+        double max_dist = 0;
+        Point[] point_pair = new Point[2];
+
+        int j = 1;
+        for (int i = 0; i < convexHull.size(); i++) {
+            int i_next = (i + 1) % convexHull.size();
+            for (; ; ) {
+                int j_next = (j + 1) % convexHull.size();
+
+                long bx = convexHull.get(i_next).x - convexHull.get(i).x; // 왼쪽 벡터
+                long by = convexHull.get(i_next).y - convexHull.get(i).y;
+                long cx = convexHull.get(j_next).x - convexHull.get(j).x;   // 오른쪽 벡터
+                long cy = convexHull.get(j_next).y - convexHull.get(j).y;
+
+                long ccw = ccw(new Point(0, 0), new Point(bx, by), new Point(cx, cy));
+                if (ccw > 0) {  // 반시계 방향이면 오른쪽에 있는 점을 다음으로
+                    j = j_next;
+                } else {    // 시계 방향이면 왼족에 있는 점을 다음으로
+                    break;
+                }
+            }
+
+            // 최대 거리 구하기
+            if (dist(convexHull.get(i), convexHull.get(j)) > max_dist) {
+                max_dist = dist(convexHull.get(i), convexHull.get(j));
+                point_pair[0] = convexHull.get(i);
+                point_pair[1] = convexHull.get(j);
+            }
+        }
+
+        return point_pair;
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -62,12 +102,17 @@ public class AL_10254 {
             });
 
             Stack<Integer> stack = new Stack<>();
-            stack.push(1);
+            stack.push(0);
             for(int j=1; i<n; i++){
-                while(stack.size() > 1 && ccw(map[stack.get(stack.size()-2)], map[stack.peek()], map[i]) <=0 ){
+                while(stack.size() > 1 && ccw(map[stack.get(stack.size()-1)], map[stack.peek()], map[i]) <=0 ){
                     stack.pop();
                 }
                 stack.add(i);
+            }
+
+            for (int j=0; j<stack.size(); j++) {
+                int a = j;
+
             }
         }
     }
