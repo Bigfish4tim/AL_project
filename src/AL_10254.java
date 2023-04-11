@@ -6,10 +6,10 @@ public class AL_10254 {
     static point[] map;
 
     public static class point {
-        int x;
-        int y;
+        long x;
+        long y;
 
-        public point(int x, int y) {
+        public point(long x, long y) {
             this.x = x;
             this.y = y;
         }
@@ -23,44 +23,10 @@ public class AL_10254 {
         else    return 0;
     }
 
-    public static int dist(point p1, point p2) {
-        int dx = p1.x - p2.x;
-        int dy = p1.y - p2.y;
+    public static long dist(point p1, point p2) {
+        long dx = p1.x - p2.x;
+        long dy = p1.y - p2.y;
         return (dx*dx + dy*dy);
-    }
-
-    static point[] rotatingCalipers(ArrayList<point> convexHull) {
-        double max_dist = 0;
-        Point[] point_pair = new Point[2];
-
-        int j = 1;
-        for (int i = 0; i < convexHull.size(); i++) {
-            int i_next = (i + 1) % convexHull.size();
-            for (; ; ) {
-                int j_next = (j + 1) % convexHull.size();
-
-                long bx = convexHull.get(i_next).x - convexHull.get(i).x; // 왼쪽 벡터
-                long by = convexHull.get(i_next).y - convexHull.get(i).y;
-                long cx = convexHull.get(j_next).x - convexHull.get(j).x;   // 오른쪽 벡터
-                long cy = convexHull.get(j_next).y - convexHull.get(j).y;
-
-                long ccw = ccw(new Point(0, 0), new Point(bx, by), new Point(cx, cy));
-                if (ccw > 0) {  // 반시계 방향이면 오른쪽에 있는 점을 다음으로
-                    j = j_next;
-                } else {    // 시계 방향이면 왼족에 있는 점을 다음으로
-                    break;
-                }
-            }
-
-            // 최대 거리 구하기
-            if (dist(convexHull.get(i), convexHull.get(j)) > max_dist) {
-                max_dist = dist(convexHull.get(i), convexHull.get(j));
-                point_pair[0] = convexHull.get(i);
-                point_pair[1] = convexHull.get(j);
-            }
-        }
-
-        return point_pair;
     }
 
     public static void main(String[] args) throws IOException {
@@ -83,11 +49,11 @@ public class AL_10254 {
                 map[j] = new point(tempX, tempY);
             }
 
-            for(int j=0; i<n; i++){
-                if(map[0].y > map[i].y || map[0].y == map[i].y && map[0].x > map[i].x){
+            for(int j=0; j<n; j++){
+                if(map[0].y > map[j].y || map[0].y == map[j].y && map[0].x > map[j].x){
                     point temp = map[0];
-                    map[0] = map[i];
-                    map[i] = temp;
+                    map[0] = map[j];
+                    map[j] = temp;
                 }
             }
 
@@ -97,23 +63,51 @@ public class AL_10254 {
                     int vertex = ccw(new point(map[0].x, map[0].y), o1, o2);
                     if (vertex > 0) return -1;
                     if (vertex < 0) return 1;
-                    return (Math.abs(o1.x) + o1.y) - (Math.abs(o2.x) + o2.y);
+                    return (int) ((Math.abs(o1.x) + o1.y) - (Math.abs(o2.x) + o2.y));
                 }
             });
 
             Stack<Integer> stack = new Stack<>();
             stack.push(0);
-            for(int j=1; i<n; i++){
-                while(stack.size() > 1 && ccw(map[stack.get(stack.size()-1)], map[stack.peek()], map[i]) <=0 ){
+            for(int j=1; j<n; j++){
+                while(stack.size() > 1 && ccw(map[stack.get(stack.size()-2)], map[stack.peek()], map[j]) <=0 ){
                     stack.pop();
                 }
-                stack.add(i);
+                stack.add(j);
             }
 
+            long max_dist = 0;
+            point[] point_pair = new point[2];
+
+            int k=1;
             for (int j=0; j<stack.size(); j++) {
-                int a = j;
+                int left_next = (j+1) % stack.size();
+                while (true) {
+                    int right_next = (k+1) % stack.size();
 
+                    long ab_x = map[stack.get(left_next)].x - map[stack.get(j)].x;
+                    long ab_y = map[stack.get(left_next)].y - map[stack.get(j)].y;
+
+                    long cd_x = map[stack.get(right_next)].x - map[stack.get(k)].x;
+                    long cd_y = map[stack.get(right_next)].y - map[stack.get(k)].y;
+
+                    if (ccw(new point(0,0), new point(ab_x, ab_y), new point(cd_x, cd_y)) > 0) {
+                        k = right_next;
+                    } else {
+                        break;
+                    }
+                }
+
+                if(dist(map[stack.get(j)], map[stack.get(k)]) > max_dist) {
+                    max_dist = dist(map[stack.get(j)], map[stack.get(k)]);
+                    point_pair[0] = map[stack.get(j)];
+                    point_pair[1] = map[stack.get(k)];
+                }
             }
+            bw.write(point_pair[0].x + " " + point_pair[0].y + " " + point_pair[1].x + " " + point_pair[1].y + "\n");
         }
+        br.close();
+        bw.flush();
+        bw.close();
     }
 }
