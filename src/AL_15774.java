@@ -14,9 +14,6 @@ public class AL_15774 {
         public int getX() { return x; }
         public int getY() { return y; }
 
-
-
-
         public house(int x, int y) {
             this.x = x;
             this.y = y;
@@ -28,6 +25,24 @@ public class AL_15774 {
             else if (this.x < o.getX()) return -1;
             else return Integer.compare(this.y, o.getY());
         }
+    }
+
+    public static int ccw(house A, house B, house C) {
+        long cal = 0;
+        cal = (long)(B.x - A.x) * (C.y - A.y) - (long)(C.x-A.x) * (B.y-A.y);
+        if(cal > 0)    return 1;
+        else if (cal< 0)    return -1;
+        else    return 0;
+    }
+
+    public static long dist(house p1, house p2) {
+        long dx = p1.x - p2.x;
+        long dy = p1.y - p2.y;
+        return (dx*dx + dy*dy);
+    }
+
+    public static house[] caliph() {
+
     }
 
     public static void main(String[] args) throws IOException {
