@@ -5,7 +5,7 @@ import java.util.*;
 
 public class AL_15774 {
     static int n, k;
-    static house[] map;
+    static ArrayList<house> map = new ArrayList<>();
 
     public static class house implements Comparable<house> {
         long x;
@@ -25,10 +25,6 @@ public class AL_15774 {
             else if (this.x < o.getX()) return -1;
             else return Long.compare(this.y, o.getY());
         }
-    }
-
-    public static class houseList extends ArrayList<house> {
-
     }
 
     static long ccw(house p1, house p2, house p3) {
@@ -124,16 +120,62 @@ public class AL_15774 {
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
 
-        map = new house[n];
-
         for(int i=0; i<n; i++) {
             st = new StringTokenizer(br.readLine());
-            map[i].x = Integer.parseInt(st.nextToken());
-            map[i].y = Integer.parseInt(st.nextToken());
+            long tempX = Integer.parseInt(st.nextToken());
+            long tempY = Integer.parseInt(st.nextToken());
+            map.add(new house(tempX,tempY));
         }
 
-        Arrays.sort(map);
+        Collections.sort(map);
+
+        if(k==1) {
+            ArrayList<house> list = new ArrayList<>(convexHull(map));
+            System.out.println(rotatingCalipers(list));
+            return;
+        }
+
+        long start = map.get(0).x;
+        long end = map.get(n-1).x;
+
+        long[] divider = new long[k];
+        long standard = (start+end)/k;
+
+        for (int i=0; i<divider.length-1; i++) divider[i] = (i+1) * standard;
+        divider[k-1] = end;
 
 
+
+        while (true) {
+            long[] distSet = new long[k];
+            long max = 0;
+            int index = 0;
+            int count = 0;
+            for (int i=0; i<k; i++) {
+                ArrayList<house> houses = new ArrayList<>();
+                while (map.get(count).x <= divider[i]) {
+                    houses.add(map.get(count));
+                    count++;
+                }
+                ArrayList<house> list = new ArrayList<>(convexHull(houses));
+                distSet[i] = rotatingCalipers(list);
+            }
+
+            for (int i=0; i<distSet.length; i++) {
+                if (max < distSet[i]) {
+                    max = distSet[i];
+                    index = i;
+                }
+            }
+
+            if (index == 0) {
+                
+            } else if (index == k-1) {
+                
+            } else {
+                
+            }
+            break;
+        }
     }
 }
