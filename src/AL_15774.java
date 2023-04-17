@@ -7,6 +7,12 @@ public class AL_15774 {
     static int n, k;
     static ArrayList<house> map = new ArrayList<>();
 
+    static int[] divider;
+    static long[] distSet;
+    static long max;
+    static int index;
+    static int count;
+
     public static class house implements Comparable<house> {
         long x;
         long y;
@@ -113,6 +119,18 @@ public class AL_15774 {
         return max_dist;
     }
 
+    static long finalDist(int a, int b) {
+        long returns = 0;
+
+        ArrayList<house> houses = new ArrayList<>();
+        for (int i=0; i<map.size(); i++) {
+            if (map.get(i).x > a && map.get(i).x <= b) houses.add(map.get(i));
+        }
+        ArrayList<house> list = new ArrayList<>(convexHull(houses));
+        returns = rotatingCalipers(list);
+        return returns;
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -135,47 +153,55 @@ public class AL_15774 {
             return;
         }
 
-        long start = map.get(0).x;
-        long end = map.get(n-1).x;
+        int start = (int) map.get(0).x;
+        int end = (int) map.get(n-1).x;
 
-        long[] divider = new long[k];
-        long standard = (start+end)/k;
+        divider = new int[k];
+        int standard = (start+end)/k;
 
         for (int i=0; i<divider.length-1; i++) divider[i] = (i+1) * standard;
         divider[k-1] = end;
 
+        distSet = new long[k];
+        max = 0;
+        index = 0;
+        count = 0;
+        for (int i=0; i<k; i++) {
+            ArrayList<house> houses = new ArrayList<>();
+            while (map.get(count).x <= divider[i]) {
+                houses.add(map.get(count));
+                count++;
+            }
+            ArrayList<house> list = new ArrayList<>(convexHull(houses));
+            distSet[i] = rotatingCalipers(list);
+        }
 
+        for (int i=0; i<distSet.length; i++) {
+            if (max < distSet[i]) {
+                max = distSet[i];
+                index = i;
+            }
+        }
 
         while (true) {
-            long[] distSet = new long[k];
-            long max = 0;
-            int index = 0;
-            int count = 0;
-            for (int i=0; i<k; i++) {
-                ArrayList<house> houses = new ArrayList<>();
-                while (map.get(count).x <= divider[i]) {
-                    houses.add(map.get(count));
-                    count++;
-                }
-                ArrayList<house> list = new ArrayList<>(convexHull(houses));
-                distSet[i] = rotatingCalipers(list);
-            }
-
-            for (int i=0; i<distSet.length; i++) {
-                if (max < distSet[i]) {
-                    max = distSet[i];
-                    index = i;
-                }
-            }
 
             if (index == 0) {
-                
+                divider[index] = (divider[index] + start) / 2;
             } else if (index == k-1) {
-                
+                divider[index-1] = (divider[index] + divider[index-1]) / 2;
             } else {
-                
+                int tempDivider = (divider[index-1] + divider[index]) / 2;
+                long left = finalDist(divider[index-1], tempDivider);
+                long right = finalDist(tempDivider, divider[index]);
+                if (left <= right) {
+                    divider[index-1] = tempDivider;
+                } else {
+                    divider[index] = tempDivider;
+                }
             }
             break;
         }
     }
+
+
 }
