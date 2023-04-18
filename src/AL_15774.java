@@ -12,6 +12,8 @@ public class AL_15774 {
     static long max;
     static int index;
     static int count;
+    static int start;
+    static int end;
 
     public static class house implements Comparable<house> {
         long x;
@@ -122,6 +124,8 @@ public class AL_15774 {
     static long finalDist(int a, int b) {
         long returns = 0;
 
+        if (a == start) a--;
+
         ArrayList<house> houses = new ArrayList<>();
         for (int i=0; i<map.size(); i++) {
             if (map.get(i).x > a && map.get(i).x <= b) houses.add(map.get(i));
@@ -153,20 +157,21 @@ public class AL_15774 {
             return;
         }
 
-        int start = (int) map.get(0).x;
-        int end = (int) map.get(n-1).x;
+        start = (int) map.get(0).x;
+        end = (int) map.get(n-1).x;
 
-        divider = new int[k];
+        divider = new int[k+1];
         int standard = (start+end)/k;
 
-        for (int i=0; i<divider.length-1; i++) divider[i] = (i+1) * standard;
-        divider[k-1] = end;
+        divider[0] = start;
+        for (int i=1; i<divider.length-1; i++) divider[i] = (i+1) * standard;
+        divider[k] = end;
 
-        distSet = new long[k];
+        distSet = new long[k+1];
         max = 0;
         index = 0;
         count = 0;
-        for (int i=0; i<k; i++) {
+        for (int i=1; i<divider.length; i++) {
             ArrayList<house> houses = new ArrayList<>();
             while (map.get(count).x <= divider[i]) {
                 houses.add(map.get(count));
@@ -184,22 +189,66 @@ public class AL_15774 {
         }
 
         while (true) {
-
-            if (index == 0) {
+            if (index == 1) {
                 divider[index] = (divider[index] + start) / 2;
-            } else if (index == k-1) {
+                long left = finalDist(start, divider[index]);
+                long right = finalDist(divider[index], divider[index+1]);
+
+                if (left <= right) {
+                    if (right > max) break;
+                    else {
+                        index++;
+                        max = right;
+                    }
+                } else {
+                    if (left > max) break;
+                    else {
+                        max = left;
+                    }
+                }
+            } else if (index == k) {
                 divider[index-1] = (divider[index] + divider[index-1]) / 2;
+                long left = finalDist(divider[index-2], divider[index-1]);
+                long right = finalDist(divider[index-1], divider[index]);
+
+                if (left <= right) {
+                    if (right > max) break;
+                    else {
+                        max = right;
+                    }
+                } else {
+                    if (left > max) break;
+                    else {
+                        index--;
+                        max = left;
+                    }
+                }
             } else {
                 int tempDivider = (divider[index-1] + divider[index]) / 2;
-                long left = finalDist(divider[index-1], tempDivider);
-                long right = finalDist(tempDivider, divider[index]);
+                long left = finalDist(divider[index-2], tempDivider);
+                long right = finalDist(tempDivider, divider[index+1]);
                 if (left <= right) {
                     divider[index-1] = tempDivider;
+                    long middle = finalDist(divider[index-1], divider[index]);
+                    if (left <= middle) {
+                        if (middle > max) break;
+                        else {
+                            max = middle;
+                        }
+                    } else {
+                        if (left > max) break;
+                        else {
+                            index--;
+                            max = left;
+                        }
+                    }
                 } else {
                     divider[index] = tempDivider;
+                    long middle = finalDist(divider[index-1], divider[index]);
+
                 }
+
             }
-            break;
         }
     }
 
