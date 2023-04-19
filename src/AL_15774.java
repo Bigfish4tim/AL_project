@@ -135,6 +135,15 @@ public class AL_15774 {
         return returns;
     }
 
+    static void findMax() {
+        for (int i=0; i<distSet.length; i++) {
+            if (max < distSet[i]) {
+                max = distSet[i];
+                index = i;
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -181,12 +190,7 @@ public class AL_15774 {
             distSet[i] = rotatingCalipers(list);
         }
 
-        for (int i=0; i<distSet.length; i++) {
-            if (max < distSet[i]) {
-                max = distSet[i];
-                index = i;
-            }
-        }
+        findMax();
 
         while (true) {
             if (index == 1) {
@@ -197,13 +201,18 @@ public class AL_15774 {
                 if (left <= right) {
                     if (right > max) break;
                     else {
-                        index++;
-                        max = right;
+                        distSet[index] = left;
+                        distSet[index+1] = right;
+
+                        findMax();
                     }
                 } else {
-                    if (left > max) break;
+                    if (left > max) break; // 의미없는 조건
                     else {
-                        max = left;
+                        distSet[index] = left;
+                        distSet[index+1] = right;
+
+                        findMax();
                     }
                 }
             } else if (index == k) {
@@ -214,13 +223,18 @@ public class AL_15774 {
                 if (left <= right) {
                     if (right > max) break;
                     else {
-                        max = right;
+                        distSet[index-1] = left;
+                        distSet[index] = right;
+
+                        findMax();
                     }
                 } else {
                     if (left > max) break;
                     else {
-                        index--;
-                        max = left;
+                        distSet[index-1] = left;
+                        distSet[index] = right;
+
+                        findMax();
                     }
                 }
             } else {
