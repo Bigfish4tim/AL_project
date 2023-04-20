@@ -7,13 +7,13 @@ public class AL_15774 {
     static int n, k;
     static ArrayList<house> map = new ArrayList<>();
 
-    static int[] divider;
+    static double[] divider;
     static long[] distSet;
     static long max;
     static int index;
     static int count;
-    static int start;
-    static int end;
+    static double start;
+    static double end;
 
     public static class house implements Comparable<house> {
         long x;
@@ -46,7 +46,7 @@ public class AL_15774 {
     }
 
     public static Stack<house> convexHull(ArrayList<house> input) {
-        house root = new house(0,0);
+        house root = new house(Long.MAX_VALUE,Long.MAX_VALUE);
 
         for (int i = 0; i < input.size(); i++) {
             if (input.get(i).x < root.x) {
@@ -81,7 +81,7 @@ public class AL_15774 {
         stack.add(root);
 
         for (int i=1; i<input.size(); i++) {
-            while (stack.size() > 1 && (ccw(stack.get(stack.size()-2), stack.get(stack.size()-1, input.get(i))) <= 0)) {
+            while (stack.size() > 1 && (ccw(stack.get(stack.size()-2), stack.get(stack.size()-1), input.get(i)) <= 0)) {
                 stack.pop();
             }
             stack.add(input.get(i));
@@ -91,6 +91,9 @@ public class AL_15774 {
     }
 
     static long rotatingCalipers(ArrayList<house> convexHull) {
+        if (convexHull.size() <= 1) {
+            return 0;
+        }
         long max_dist = 0;
 
         int j = 1;
@@ -121,7 +124,7 @@ public class AL_15774 {
         return max_dist;
     }
 
-    static long finalDist(int a, int b) {
+    static long finalDist(double a, double b) {
         long returns = 0;
 
         if (a == start) a--;
@@ -136,6 +139,7 @@ public class AL_15774 {
     }
 
     static void findMax() {
+        max = 0;
         for (int i=0; i<distSet.length; i++) {
             if (max < distSet[i]) {
                 max = distSet[i];
@@ -165,24 +169,25 @@ public class AL_15774 {
             System.out.println(rotatingCalipers(list));
             return;
         }
+//        else if (k==n) {
+//            System.out.println(0);
+//            return;
+//        }
 
-        start = (int) map.get(0).x;
-        end = (int) map.get(n-1).x;
+        start = (double) map.get(0).x;
+        end = (double) map.get(n-1).x;
 
-        divider = new int[k+1];
-        int standard = (start+end)/k;
+        divider = new double[k+1];
+        double standard = (end-start)/k;
 
-        divider[0] = start;
-        for (int i=1; i<divider.length-1; i++) divider[i] = (i+1) * standard;
-        divider[k] = end;
+        for (int i=0; i<divider.length; i++) divider[i] = start + (i) * standard;
 
         distSet = new long[k+1];
-        max = 0;
         index = 0;
         count = 0;
         for (int i=1; i<divider.length; i++) {
             ArrayList<house> houses = new ArrayList<>();
-            while (map.get(count).x <= divider[i]) {
+            while (count < map.size() && map.get(count).x <= divider[i]) {
                 houses.add(map.get(count));
                 count++;
             }
@@ -195,6 +200,7 @@ public class AL_15774 {
         while (true) {
             if (index == 1) {
                 divider[index] = (divider[index] + start) / 2;
+                if (divider[index+1] - divider[index] < 1) break;
                 long left = finalDist(start, divider[index]);
                 long right = finalDist(divider[index], divider[index+1]);
 
@@ -217,6 +223,7 @@ public class AL_15774 {
                 }
             } else if (index == k) {
                 divider[index-1] = (divider[index] + divider[index-1]) / 2;
+                if (divider[index] - divider[index-1] < 1) break;
                 long left = finalDist(divider[index-2], divider[index-1]);
                 long right = finalDist(divider[index-1], divider[index]);
 
@@ -238,33 +245,55 @@ public class AL_15774 {
                     }
                 }
             } else {
-                int tempDivider = (divider[index-1] + divider[index]) / 2;
+                double tempDivider = (divider[index-1] + divider[index]) / 2;
                 long left = finalDist(divider[index-2], tempDivider);
                 long right = finalDist(tempDivider, divider[index+1]);
+
                 if (left <= right) {
                     divider[index-1] = tempDivider;
+                    if (divider[index] - divider[index-1] < 1) break;
                     long middle = finalDist(divider[index-1], divider[index]);
                     if (left <= middle) {
                         if (middle > max) break;
                         else {
-                            max = middle;
+                            distSet[index-1] = left;
+                            distSet[index] = middle;
+
+                            findMax();
                         }
                     } else {
                         if (left > max) break;
                         else {
-                            index--;
-                            max = left;
+                            distSet[index-1] = left;
+                            distSet[index] = middle;
+
+                            findMax();
                         }
                     }
                 } else {
                     divider[index] = tempDivider;
+                    if (divider[index+1] - divider[index] < 1) break;
                     long middle = finalDist(divider[index-1], divider[index]);
+                    if (right <= middle) {
+                        if (right > max) break;
+                        else {
+                            distSet[index+1] = right;
+                            distSet[index] = middle;
 
+                            findMax();
+                        }
+                    } else {
+                        if (middle > max) break;
+                        else {
+                            distSet[index+1] = right;
+                            distSet[index] = middle;
+
+                            findMax();
+                        }
+                    }
                 }
-
             }
         }
+        System.out.println(max);
     }
-
-
 }
