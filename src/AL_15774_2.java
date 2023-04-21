@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class AL_15774 {
+public class AL_15774_2 {
     static int n, k;
     static ArrayList<house> map = new ArrayList<>();
 
@@ -176,7 +176,19 @@ public class AL_15774 {
         divider = new double[k+1];
         double standard = (end-start)/k;
 
-        for (int i=0; i<divider.length; i++) divider[i] = start + (i) * standard;
+//        for (int i=0; i<divider.length; i++) divider[i] = start + (i) * standard;
+
+        double standardCount = (double) n/k;
+        int divCount = 0;
+        int divCount2 = 0;
+
+        for (int i=0; i<k; i++) {
+            standardCount = standardCount * i;
+            if (divCount <= standardCount) {
+                divider[k] = map.get(divCount).x;
+
+            }
+        }
 
         distSet = new long[k+1];
         index = 0;
@@ -193,7 +205,7 @@ public class AL_15774 {
 
         findMax();
 
-        while (index != 0 && divider[index] - divider[index-1] > 1) {
+        while (index != 0) {
             if (index == 1) {
                 divider[index] = (divider[index] + start) / 2;
                 long left = finalDist(start, divider[index]);
