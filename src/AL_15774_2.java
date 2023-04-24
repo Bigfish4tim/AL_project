@@ -182,12 +182,19 @@ public class AL_15774_2 {
         int divCount = 0;
         int divCount2 = 0;
 
-        for (int i=0; i<k; i++) {
-            standardCount = standardCount * i;
-            if (divCount <= standardCount) {
-                divider[k] = map.get(divCount).x;
+//        for (int i=0; i<k; i++) {
+//            double standardCount2 = standardCount * i;
+//            while (divCount < standardCount2-1) divCount++;
+//            if (divCount <= standardCount2) {
+//                divider[i] = map.get(divCount).x;
+//                divCount++;
+//            }
+//        }
 
-            }
+        for (int i=1; i< divider.length; i++) {
+            double standardCount2 = standardCount * i;
+            while (divCount < standardCount2) divCount++;
+            divider[i] = map.get(divCount-1).x;
         }
 
         distSet = new long[k+1];
@@ -205,7 +212,7 @@ public class AL_15774_2 {
 
         findMax();
 
-        while (index != 0) {
+        while (index != 0 && divider[index] - divider[index-1] > 1) {
             if (index == 1) {
                 divider[index] = (divider[index] + start) / 2;
                 long left = finalDist(start, divider[index]);
@@ -279,7 +286,7 @@ public class AL_15774_2 {
                     divider[index] = tempDivider;
                     long middle = finalDist(divider[index-1], divider[index]);
                     if (right <= middle) {
-                        if (right > max) break;
+                        if (right > max) break; // max 변수를 갱신하는 부분에 문제가 생김
                         else {
                             distSet[index+1] = right;
                             distSet[index] = middle;
