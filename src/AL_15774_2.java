@@ -218,45 +218,71 @@ public class AL_15774_2 {
                 long left = finalDist(start, divider[index]);
                 long right = finalDist(divider[index], divider[index+1]);
 
-                if (left <= right) {
-                    if (right > max) break;
-                    else {
-                        distSet[index] = left;
-                        distSet[index+1] = right;
-
-                        findMax();
-                    }
-                } else {
-                    if (left > max) break; // 의미없는 조건
-                    else {
-                        distSet[index] = left;
-                        distSet[index+1] = right;
-
-                        findMax();
-                    }
+                while (right > max) {
+                    divider[index] = (divider[index] + divider[index+1]) / 2;
+                    right = finalDist(divider[index], divider[index+1]);
                 }
+
+                distSet[index] = left;
+                distSet[index+1] = right;
+
+                findMax();
+
+//                if (left <= right) {
+//                    if (right > max) {
+//                        divider[index] = (divider[index] + divider[index+1]) / 2;
+//                    }
+//                    else {
+//                        distSet[index] = left;
+//                        distSet[index+1] = right;
+//
+//                        findMax();
+//                    }
+//                } else {
+//                    if (left > max) {
+//                        divider[index] = (divider[index] + start) / 2;
+//                    }
+//                    else {
+//                        distSet[index] = left;
+//                        distSet[index+1] = right;
+//
+//                        findMax();
+//                    }
+//                }
             } else if (index == k) {
                 divider[index-1] = (divider[index] + divider[index-1]) / 2;
                 long left = finalDist(divider[index-2], divider[index-1]);
                 long right = finalDist(divider[index-1], divider[index]);
 
-                if (left <= right) {
-                    if (right > max) break;
-                    else {
-                        distSet[index-1] = left;
-                        distSet[index] = right;
-
-                        findMax();
-                    }
-                } else {
-                    if (left > max) break;
-                    else {
-                        distSet[index-1] = left;
-                        distSet[index] = right;
-
-                        findMax();
-                    }
+                while (left > max) {
+                    divider[index-1] = (divider[index-2] + divider[index-1]) / 2;
+                    left = finalDist(divider[index-2], divider[index-1]);
                 }
+
+                distSet[index-1] = left;
+                distSet[index] = right;
+
+//                if (left <= right) {
+//                    if (right > max) {
+//                        divider[index-1] = (divider[index] + divider[index-1]) / 2;
+//                    }
+//                    else {
+//                        distSet[index-1] = left;
+//                        distSet[index] = right;
+//
+//                        findMax();
+//                    }
+//                } else {
+//                    if (left > max) {
+//                        divider[index-1] = (divider[index-2] + divider[index-1]) / 2;
+//                    }
+//                    else {
+//                        distSet[index-1] = left;
+//                        distSet[index] = right;
+//
+//                        findMax();
+//                    }
+//                }
             } else {
                 double tempDivider = (divider[index-1] + divider[index]) / 2;
                 long left = finalDist(divider[index-2], tempDivider);
@@ -265,43 +291,77 @@ public class AL_15774_2 {
                 if (left <= right) {
                     divider[index-1] = tempDivider;
                     long middle = finalDist(divider[index-1], divider[index]);
-                    if (left <= middle) {
-                        if (middle > max) break;
-                        else {
-                            distSet[index-1] = left;
-                            distSet[index] = middle;
 
-                            findMax();
-                        }
-                    } else {
-                        if (left > max) break;
-                        else {
-                            distSet[index-1] = left;
-                            distSet[index] = middle;
-
-                            findMax();
-                        }
+                    while (left > max) {
+                        divider[index-1] = (tempDivider + divider[index-2]) / 2;
+                        left = finalDist(divider[index-2], divider[index-1]);
                     }
+
+                    distSet[index-1] = left;
+                    distSet[index] = middle;
+
+                    findMax();
+
+//                    if (left <= middle) {
+//                        if (middle > max) {
+////                            divider[index-1] = (tempDivider + divider[index]) / 2;
+//                            continue;
+//                        }
+//                        else {
+//                            distSet[index-1] = left;
+//                            distSet[index] = middle;
+//
+//                            findMax();
+//                        }
+//                    } else {
+//                        if (left > max) {
+////                            divider[index-1] = (tempDivider + divider[index-2]) / 2;
+//                            continue;
+//                        }
+//                        else {
+//                            distSet[index-1] = left;
+//                            distSet[index] = middle;
+//
+//                            findMax();
+//                        }
+//                    }
                 } else {
                     divider[index] = tempDivider;
                     long middle = finalDist(divider[index-1], divider[index]);
-                    if (right <= middle) {
-                        if (right > max) break; // max 변수를 갱신하는 부분에 문제가 생김
-                        else {
-                            distSet[index+1] = right;
-                            distSet[index] = middle;
 
-                            findMax();
-                        }
-                    } else {
-                        if (middle > max) break;
-                        else {
-                            distSet[index+1] = right;
-                            distSet[index] = middle;
-
-                            findMax();
-                        }
+                    while (right > max) {
+                        divider[index] = (tempDivider + divider[index+1]) / 2;
+                        right = finalDist(divider[index], divider[index+1]);
                     }
+
+                    distSet[index+1] = right;
+                    distSet[index] = middle;
+
+                    findMax();
+
+//                    if (right <= middle) {
+//                        if (middle > max) {
+////                            divider[index] = (tempDivider + divider[index-1]) / 2;
+//                            continue;
+//                        }
+//                        else {
+//                            distSet[index+1] = right;
+//                            distSet[index] = middle;
+//
+//                            findMax();
+//                        }
+//                    } else {
+//                        if (right > max) {
+////                            divider[index] = (tempDivider + divider[index+1]) / 2;
+//                            continue;
+//                        }
+//                        else {
+//                            distSet[index+1] = right;
+//                            distSet[index] = middle;
+//
+//                            findMax();
+//                        }
+//                    }
                 }
             }
         }
