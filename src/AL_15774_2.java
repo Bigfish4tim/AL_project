@@ -219,7 +219,8 @@ public class AL_15774_2 {
                 long right = finalDist(divider[index], divider[index+1]);
 
                 while (right > max && oriDiv - divider[index] >= 1) {
-                    divider[index] = (divider[index] + oriDiv) / 2;
+                    divider[index] = (divider[index] * 3 + divider[index+1]) / 4;
+                    divider[index+1] = (divider[index] + divider[index+1] * 3) / 4;
                     right = finalDist(divider[index], divider[index+1]);
                 }
 
@@ -259,7 +260,8 @@ public class AL_15774_2 {
                 long left = finalDist(divider[index-2], divider[index-1]);
 
                 while (left > max && divider[index-1] - oriDiv >= 1) {
-                    divider[index-1] = (oriDiv + divider[index-1]) / 2;
+                    divider[index-1] = (divider[index-2] + divider[index-1] * 3) / 4;
+                    divider[index-2] = (divider[index-2] * 3 + divider[index-1]) / 4;
                     left = finalDist(divider[index-2], divider[index-1]);
                 }
 
@@ -294,91 +296,116 @@ public class AL_15774_2 {
 //                    }
 //                }
             } else {
-                double tempDivider = (divider[index-1] + divider[index]) / 2;
-                long left = finalDist(divider[index-2], tempDivider);
-                long right = finalDist(tempDivider, divider[index+1]);
+                divider[index] = (divider[index-1] + divider[index] * 3) / 4;
+                divider[index-1] = (divider[index-1] * 3 + divider[index]) / 4;
 
-                double oriDiv;
-                if (left <= right) {
-                    oriDiv = divider[index - 1];
-                    divider[index-1] = tempDivider;
+                long middle = finalDist(divider[index-1], divider[index]);
 
-                    while (left > max && divider[index-1] - oriDiv >= 1) {
-                        divider[index-1] = (divider[index-1] + oriDiv) / 2;
-                        left = finalDist(divider[index-2], divider[index-1]);
-                    }
+                while (middle > max && divider[index] - divider[index-1] > 1) {
+                    divider[index] = (divider[index-1] + divider[index] * 3) / 4;
+                    divider[index-1] = (divider[index-1] * 3 + divider[index]) / 4;
 
-                    if (left > max) break;
-
-                    long middle = finalDist(divider[index-1], divider[index]);
-
-                    distSet[index-1] = left;
-                    distSet[index] = middle;
-
-                    //                    if (left <= middle) {
-//                        if (middle > max) {
-////                            divider[index-1] = (tempDivider + divider[index]) / 2;
-//                            continue;
-//                        }
-//                        else {
-//                            distSet[index-1] = left;
-//                            distSet[index] = middle;
-//
-//                            findMax();
-//                        }
-//                    } else {
-//                        if (left > max) {
-////                            divider[index-1] = (tempDivider + divider[index-2]) / 2;
-//                            continue;
-//                        }
-//                        else {
-//                            distSet[index-1] = left;
-//                            distSet[index] = middle;
-//
-//                            findMax();
-//                        }
-//                    }
-                } else {
-                    oriDiv = divider[index];
-                    divider[index] = tempDivider;
-
-                    while (right > max && oriDiv - divider[index] > 1) {
-                        divider[index] = (oriDiv + divider[index]) / 2;
-                        right = finalDist(divider[index], divider[index+1]);
-                    }
-
-                    if (right > max) break;
-
-                    long middle = finalDist(divider[index-1], divider[index]);
-
-                    distSet[index+1] = right;
-                    distSet[index] = middle;
-
-                    //                    if (right <= middle) {
-//                        if (middle > max) {
-////                            divider[index] = (tempDivider + divider[index-1]) / 2;
-//                            continue;
-//                        }
-//                        else {
-//                            distSet[index+1] = right;
-//                            distSet[index] = middle;
-//
-//                            findMax();
-//                        }
-//                    } else {
-//                        if (right > max) {
-////                            divider[index] = (tempDivider + divider[index+1]) / 2;
-//                            continue;
-//                        }
-//                        else {
-//                            distSet[index+1] = right;
-//                            distSet[index] = middle;
-//
-//                            findMax();
-//                        }
-//                    }
+                    middle = finalDist(divider[index-1], divider[index]);
                 }
+
+                if (middle > max) break;
+
+                long left = finalDist(divider[index-2], divider[index-1]);
+                long right = finalDist(divider[index], divider[index+1]);
+
+                distSet[index-1] = left;
+                distSet[index] = middle;
+                distSet[index+1] = right;
+
                 findMax();
+
+//                double tempDivider = (divider[index-1] + divider[index]) / 2;
+//                long left = finalDist(divider[index-2], tempDivider);
+//                long right = finalDist(tempDivider, divider[index+1]);
+//
+//                double oriDiv;
+//                if (left <= right) {
+//                    oriDiv = divider[index - 1];
+//                    divider[index-1] = tempDivider;
+//
+//                    while (left > max && divider[index-1] - oriDiv >= 1) {
+//                        divider[index-1] = (divider[index-1] + oriDiv) / 2;
+//                        left = finalDist(divider[index-2], divider[index-1]);
+//                    }
+//
+//                    if (left > max) break;
+//
+//                    long middle = finalDist(divider[index-1], divider[index]);
+//
+//                    distSet[index-1] = left;
+//                    distSet[index] = middle;
+//
+//                    //                    if (left <= middle) {
+////                        if (middle > max) {
+//////                            divider[index-1] = (tempDivider + divider[index]) / 2;
+////                            continue;
+////                        }
+////                        else {
+////                            distSet[index-1] = left;
+////                            distSet[index] = middle;
+////
+////                            findMax();
+////                        }
+////                    } else {
+////                        if (left > max) {
+//////                            divider[index-1] = (tempDivider + divider[index-2]) / 2;
+////                            continue;
+////                        }
+////                        else {
+////                            distSet[index-1] = left;
+////                            distSet[index] = middle;
+////
+////                            findMax();
+////                        }
+////                    }
+//                } else {
+//                    oriDiv = divider[index];
+//                    divider[index] = tempDivider;
+//
+//
+//
+//                    while (right > max && oriDiv - divider[index] > 1) {
+//                        divider[index] = (oriDiv + divider[index]) / 2;
+//                        right = finalDist(divider[index], divider[index+1]);
+//                    }
+//
+//                    if (right > max) break;
+//
+//                    long middle = finalDist(divider[index-1], divider[index]);
+//
+//                    distSet[index+1] = right;
+//                    distSet[index] = middle;
+//
+//                    //                    if (right <= middle) {
+////                        if (middle > max) {
+//////                            divider[index] = (tempDivider + divider[index-1]) / 2;
+////                            continue;
+////                        }
+////                        else {
+////                            distSet[index+1] = right;
+////                            distSet[index] = middle;
+////
+////                            findMax();
+////                        }
+////                    } else {
+////                        if (right > max) {
+//////                            divider[index] = (tempDivider + divider[index+1]) / 2;
+////                            continue;
+////                        }
+////                        else {
+////                            distSet[index+1] = right;
+////                            distSet[index] = middle;
+////
+////                            findMax();
+////                        }
+////                    }
+//                }
+//                findMax();
             }
         }
         System.out.println(max);
