@@ -300,18 +300,34 @@ public class AL_15774_2 {
                 divider[index-1] = (divider[index-1] * 3 + divider[index]) / 4;
 
                 long middle = finalDist(divider[index-1], divider[index]);
-
-                while (middle > max && divider[index] - divider[index-1] > 1) {
-                    divider[index] = (divider[index-1] + divider[index] * 3) / 4;
-                    divider[index-1] = (divider[index-1] * 3 + divider[index]) / 4;
-
-                    middle = finalDist(divider[index-1], divider[index]);
-                }
-
-                if (middle > max) break;
-
                 long left = finalDist(divider[index-2], divider[index-1]);
                 long right = finalDist(divider[index], divider[index+1]);
+
+                while (right > max && divider[index+1] - divider[index] > 1) {
+                    if (index+1 == k) {
+                        divider[index] = (divider[index] + divider[index+1]) / 2;
+                        right = finalDist(divider[index], divider[index+1]);
+                    } else {
+                        divider[index+1] = (divider[index+1] * 3 + divider[index]) / 4;
+                        divider[index] = (divider[index+1] + divider[index] * 3) / 4;
+                        right = finalDist(divider[index], divider[index+1]);
+                    }
+                }
+
+                if (right > max) break;
+
+                while (left > max && divider[index-1] - divider[index-2] > 1) {
+                    if (index-2 == 1) {
+                        divider[index-1] = (divider[index-1] + divider[index-2]) / 2;
+                        left = finalDist(divider[index-2], divider[index-1]);
+                    } else {
+                        divider[index-1] = (divider[index-2] + divider[index-1] * 3) / 4;
+                        divider[index-2] = (divider[index-2] * 3 + divider[index-1]) / 4;
+                        left = finalDist(divider[index-2], divider[index-1]);
+                    }
+                }
+
+                if (left > max) break;
 
                 distSet[index-1] = left;
                 distSet[index] = middle;
