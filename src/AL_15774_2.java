@@ -214,14 +214,18 @@ public class AL_15774_2 {
 
         while (index != 0 && divider[index] - divider[index-1] >= 1) {
             if (index == 1) {
-                double oriDiv = divider[index];
                 divider[index] = (divider[index] + start) / 2;
                 long right = finalDist(divider[index], divider[index+1]);
 
-                while (right > max && oriDiv - divider[index] >= 1) {
-                    divider[index] = (divider[index] * 3 + divider[index+1]) / 4;
-                    divider[index+1] = (divider[index] + divider[index+1] * 3) / 4;
-                    right = finalDist(divider[index], divider[index+1]);
+                while (right > max && divider[index+1] - divider[index] >= 1) {
+                    if (index+1 != k) {
+                        divider[index] = (divider[index] * 3 + divider[index+1]) / 4;
+                        divider[index+1] = (divider[index] + divider[index+1] * 3) / 4;
+                        right = finalDist(divider[index], divider[index+1]);
+                    } else {
+                        divider[index] = (divider[index] + divider[index+1]) / 2;
+                        right = finalDist(divider[index], divider[index+1]);
+                    }
                 }
 
                 if (right > max) break;
@@ -255,14 +259,18 @@ public class AL_15774_2 {
 //                    }
 //                }
             } else if (index == k) {
-                double oriDiv = divider[index-1];
                 divider[index-1] = (divider[index] + divider[index-1]) / 2;
                 long left = finalDist(divider[index-2], divider[index-1]);
 
-                while (left > max && divider[index-1] - oriDiv >= 1) {
-                    divider[index-1] = (divider[index-2] + divider[index-1] * 3) / 4;
-                    divider[index-2] = (divider[index-2] * 3 + divider[index-1]) / 4;
-                    left = finalDist(divider[index-2], divider[index-1]);
+                while (left > max && divider[index-1] - divider[index-2] >= 1) {
+                    if (index-2 != 1) {
+                        divider[index-1] = (divider[index-2] + divider[index-1] * 3) / 4;
+                        divider[index-2] = (divider[index-2] * 3 + divider[index-1]) / 4;
+                        left = finalDist(divider[index-2], divider[index-1]);
+                    } else {
+                        divider[index-1] = (divider[index-2] + divider[index-1]) / 2;
+                        left = finalDist(divider[index-2], divider[index-1]);
+                    }
                 }
 
                 if (left > max) break;
