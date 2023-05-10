@@ -155,6 +155,7 @@ public class AL_15774_3 {
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
 
+
         for(int i=0; i<n; i++) {
             st = new StringTokenizer(br.readLine());
             long tempX = Integer.parseInt(st.nextToken());
