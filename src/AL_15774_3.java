@@ -235,6 +235,10 @@ public class AL_15774_3 {
 
                 findMax();
 
+                if (max <= 68232308281225L) {
+                    System.out.println("if");
+                }
+
             }
         }
     }
@@ -242,6 +246,7 @@ public class AL_15774_3 {
 
 /*
 87946846488004 보다 작은 max값 탐색부터 시작
+
 
 
 
