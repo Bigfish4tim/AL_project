@@ -176,14 +176,20 @@ public class AL_15774_3 {
 
         divider = new double[k+1];
 
-        double standardCount = (double) n/k;
-        int divCount = 0;
+//        double standardCount = (double) n/k;
+//        int divCount = 0;
+//
+//        for (int i=1; i< divider.length; i++) {
+//            double standardCount2 = standardCount * i;
+//            while (divCount < standardCount2) divCount++;
+//            divider[i] = map.get(divCount-1).x;
+//        }
 
-        for (int i=1; i< divider.length; i++) {
-            double standardCount2 = standardCount * i;
-            while (divCount < standardCount2) divCount++;
-            divider[i] = map.get(divCount-1).x;
+        for (int i=1; i< divider.length-1; i++) {
+            divider[i] = map.get(i-1).x;
         }
+
+        divider[k] = end;
 
         distSet = new long[k+1];
         index = 0;
@@ -222,24 +228,34 @@ public class AL_15774_3 {
                 findMax();
 
             } else {
-                divider[index] = (divider[index-1] + divider[index] * 3) / 4;
-                divider[index-1] = (divider[index-1] * 3 + divider[index]) / 4;
+                double mid = (divider[index-1] + divider[index]) / 2;
 
-                long middle = finalDist(divider[index-1], divider[index]);
-                long left = finalDist(divider[index-2], divider[index-1]);
-                long right = finalDist(divider[index], divider[index+1]);
+                long left = finalDist(divider[index-2], mid);
+                long right = finalDist(mid, divider[index+1]);
 
-                distSet[index-1] = left;
-                distSet[index] = middle;
-                distSet[index+1] = right;
+                if (left < right) {
 
-                findMax();
-
-                if (max <= 68232308281225L) {
-                    System.out.println("if");
                 }
-
             }
+//            else {
+//                divider[index] = (divider[index-1] + divider[index] * 3) / 4;
+//                divider[index-1] = (divider[index-1] * 3 + divider[index]) / 4;
+//
+//                long middle = finalDist(divider[index-1], divider[index]);
+//                long left = finalDist(divider[index-2], divider[index-1]);
+//                long right = finalDist(divider[index], divider[index+1]);
+//
+//                distSet[index-1] = left;
+//                distSet[index] = middle;
+//                distSet[index+1] = right;
+//
+//                findMax();
+//
+//                if (max <= 68232308281225L) {
+//                    System.out.println("if");
+//                }
+//
+//            }
         }
     }
 }
