@@ -206,57 +206,6 @@ public class AL_15774_3 {
 
         findMax();
 
-        while (index != 0 && divider[index] - divider[index-1] >= 1) { // 종료 조건 참색
-            if (index == 1) {
-                divider[index] = (divider[index] + start) / 2;
-                long right = finalDist(divider[index], divider[index+1]);
-                long left = finalDist(start, divider[index]);
-
-                distSet[index] = left;
-                distSet[index+1] = right;
-
-                findMax();
-
-            } else if (index == k) {
-                divider[index-1] = (divider[index] + divider[index-1]) / 2;
-                long left = finalDist(divider[index-2], divider[index-1]);
-                long right = finalDist(divider[index-1], divider[index]);
-
-                distSet[index-1] = left;
-                distSet[index] = right;
-
-                findMax();
-
-            } else {
-                double mid = (divider[index-1] + divider[index]) / 2;
-
-                long left = finalDist(divider[index-2], mid);
-                long right = finalDist(mid, divider[index+1]);
-
-                if (left < right) {
-
-                }
-            }
-//            else {
-//                divider[index] = (divider[index-1] + divider[index] * 3) / 4;
-//                divider[index-1] = (divider[index-1] * 3 + divider[index]) / 4;
-//
-//                long middle = finalDist(divider[index-1], divider[index]);
-//                long left = finalDist(divider[index-2], divider[index-1]);
-//                long right = finalDist(divider[index], divider[index+1]);
-//
-//                distSet[index-1] = left;
-//                distSet[index] = middle;
-//                distSet[index+1] = right;
-//
-//                findMax();
-//
-//                if (max <= 68232308281225L) {
-//                    System.out.println("if");
-//                }
-//
-//            }
-        }
     }
 }
 
