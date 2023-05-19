@@ -124,7 +124,7 @@ public class AL_15774_3 {
         return max_dist;
     }
 
-    static long finalDist(double a, double b) {
+    static long finalDist(long a, long b) {
         long returns = 0;
 
         if (a == start) a--;
@@ -206,13 +206,44 @@ public class AL_15774_3 {
 
         findMax();
 
+        long left = 1;
+        long right = finalDist(map.get(0).x, map.get(n-1).x);
+
+        while (left < right) {
+            long mid = (left+right)/2;
+
+            int count = 1;
+            long min = Long.MAX_VALUE;
+            long max = Long.MIN_VALUE;
+            long length = 0;
+
+            for (int i=0; i<n; i++) {
+                min = Math.min(min, map.get(i).x);
+                max = Math.max(max, map.get(i).x);
+                length = finalDist(min, max);
+                if (length > mid) {
+                    count++;
+                    min = Long.MAX_VALUE;
+                    max = Long.MIN_VALUE;
+                    i--;
+                }
+            }
+
+            if (count <= k) {
+                right=mid;
+            } else {
+                left=mid+1;
+            }
+
+//            if (count > k) {
+//                left = mid + 1;
+//            } else if (count == k) {
+//                right
+//            } else {
+//                right = mid;
+//            }
+        }
+
+        System.out.println(right);
     }
 }
-
-/*
-87946846488004 보다 작은 max값 탐색부터 시작
-
-
-
-
- */
