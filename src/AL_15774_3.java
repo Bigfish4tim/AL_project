@@ -7,13 +7,9 @@ public class AL_15774_3 {
     static int n, k;
     static ArrayList<house> map = new ArrayList<>();
 
-    static double[] divider;
     static long[] distSet;
     static long max;
     static int index;
-    static int count;
-    static double start;
-    static double end;
 
     public static class house implements Comparable<house> {
         long x;
@@ -127,11 +123,9 @@ public class AL_15774_3 {
     static long finalDist(long a, long b) {
         long returns = 0;
 
-        if (a == start) a--;
-
         ArrayList<house> houses = new ArrayList<>();
         for (int i=0; i<map.size(); i++) {
-            if (map.get(i).x > a && map.get(i).x <= b) houses.add(map.get(i));
+            if (map.get(i).x >= a && map.get(i).x <= b) houses.add(map.get(i));
         }
         ArrayList<house> list = new ArrayList<>(convexHull(houses));
         returns = rotatingCalipers(list);
@@ -171,45 +165,10 @@ public class AL_15774_3 {
             return;
         }
 
-        start = (double) map.get(0).x;
-        end = (double) map.get(n-1).x;
-
-        divider = new double[k+1];
-
-//        double standardCount = (double) n/k;
-//        int divCount = 0;
-//
-//        for (int i=1; i< divider.length; i++) {
-//            double standardCount2 = standardCount * i;
-//            while (divCount < standardCount2) divCount++;
-//            divider[i] = map.get(divCount-1).x;
-//        }
-
-        for (int i=1; i< divider.length-1; i++) {
-            divider[i] = map.get(i-1).x;
-        }
-
-        divider[k] = end;
-
-        distSet = new long[k+1];
-        index = 0;
-        count = 0;
-        for (int i=1; i<divider.length; i++) {
-            ArrayList<house> houses = new ArrayList<>();
-            while (count < map.size() && map.get(count).x <= divider[i]) {
-                houses.add(map.get(count));
-                count++;
-            }
-            ArrayList<house> list = new ArrayList<>(convexHull(houses));
-            distSet[i] = rotatingCalipers(list);
-        }
-
-        findMax();
-
-        long left = 1;
+        long left = 0;
         long right = finalDist(map.get(0).x, map.get(n-1).x);
 
-        while (left < right) {
+        while (left < right) {   // Log N
             long mid = (left+right)/2;
 
             int count = 1;
@@ -217,16 +176,17 @@ public class AL_15774_3 {
             long max = Long.MIN_VALUE;
             long length = 0;
 
-            for (int i=0; i<n; i++) {
+            for (int i=0; i<n; i++) {     // N
                 min = Math.min(min, map.get(i).x);
                 max = Math.max(max, map.get(i).x);
-                length = finalDist(min, max);
+                length = finalDist(min, max);  // N Log N
                 if (length > mid) {
                     count++;
                     min = Long.MAX_VALUE;
                     max = Long.MIN_VALUE;
                     i--;
                 }
+                if (count > k) break;
             }
 
             if (count <= k) {
@@ -234,14 +194,6 @@ public class AL_15774_3 {
             } else {
                 left=mid+1;
             }
-
-//            if (count > k) {
-//                left = mid + 1;
-//            } else if (count == k) {
-//                right
-//            } else {
-//                right = mid;
-//            }
         }
 
         System.out.println(right);
