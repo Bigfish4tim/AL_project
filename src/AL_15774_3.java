@@ -196,6 +196,7 @@ public class AL_15774_3 {
             }
         }
 
+
         System.out.println(right);
     }
 }
