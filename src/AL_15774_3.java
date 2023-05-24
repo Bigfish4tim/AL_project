@@ -142,6 +142,33 @@ public class AL_15774_3 {
         }
     }
 
+    int trial(int x){
+        int curlst = 0;
+        int itr = 0;
+        while(curlst < n){
+            itr++;
+            int thres_st = 0;
+            for(int i=0; curlst + (1<<i) <= n; i++){
+                if(finalDist(curlst + 1, curlst + (1L <<i)) <= x){
+                    thres_st = (1<<i);
+                }
+                else break;
+            }
+            int thres_ed = Math.min(thres_st * 2, n - curlst);
+            while(thres_st != thres_ed){
+                int m = (thres_st + thres_ed + 1) / 2;
+                if(finalDist(curlst + 1, curlst + m) <= x){
+                    thres_st = m;
+                }
+                else thres_ed = m-1;
+            }
+            if(thres_st == 0) return (int) 1e9;
+            curlst += thres_st;
+            curlst = nxt[curlst];
+        }
+        return itr;
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
