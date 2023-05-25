@@ -41,6 +41,60 @@ public class AL_15774_3 {
         return (dx*dx + dy*dy);
     }
 
+    public static List<house> computeConvexHull(ArrayList<house> points) {
+
+        int n = points.size();
+        if (n < 3) {
+            return points; // 볼록 껍질이 형성되지 않는 경우
+        }
+
+        Stack<house> upperHull = new Stack<>();
+        upperHull.push(points.get(0));
+        upperHull.push(points.get(1));
+
+        // 상단 껍질 구성
+        for (int i = 2; i < n; i++) {
+            while (upperHull.size() >= 2) {
+                house top = upperHull.pop();
+                house secondTop = upperHull.peek();
+                if (isLeftTurn(secondTop, top, points.get(i))) {
+                    upperHull.push(top);
+                    break;
+                }
+            }
+            upperHull.push(points.get(i));
+        }
+
+        Stack<house> lowerHull = new Stack<>();
+        lowerHull.push(points.get(n - 1));
+        lowerHull.push(points.get(n - 2));
+
+        // 하단 껍질 구성
+        for (int i = n - 3; i >= 0; i--) {
+            while (lowerHull.size() >= 2) {
+                house top = lowerHull.pop();
+                house secondTop = lowerHull.peek();
+                if (isLeftTurn(secondTop, top, points.get(i))) {
+                    lowerHull.push(top);
+                    break;
+                }
+            }
+            lowerHull.push(points.get(i));
+        }
+
+        // 전체 볼록 껍질 구성
+        List<house> convexHull = new ArrayList<>();
+        upperHull.pop(); // 상단 껍질의 마지막 점은 하단 껍질에 이미 포함됨
+        while (!upperHull.isEmpty()) {
+            convexHull.add(upperHull.pop());
+        }
+        while (!lowerHull.isEmpty()) {
+            convexHull.add(lowerHull.pop());
+        }
+
+        return convexHull;
+    }
+
     public static Stack<house> convexHull(ArrayList<house> input) {
         house root = new house(Long.MAX_VALUE,Long.MAX_VALUE);
 
@@ -132,41 +186,35 @@ public class AL_15774_3 {
         return returns;
     }
 
-    static void findMax() {
-        max = 0;
-        for (int i=0; i<distSet.length; i++) {
-            if (max < distSet[i]) {
-                max = distSet[i];
-                index = i;
-            }
-        }
-    }
-
-    int trial(int x){
+    static int trial(long x){
         int curlst = 0;
         int itr = 0;
         while(curlst < n){
             itr++;
             int thres_st = 0;
             for(int i=0; curlst + (1<<i) <= n; i++){
-                if(finalDist(curlst + 1, curlst + (1L <<i)) <= x){
+                if(finalDist(map.get(curlst).x, map.get(curlst + (1<<i) - 1).x) <= x){
                     thres_st = (1<<i);
                 }
                 else break;
             }
             int thres_ed = Math.min(thres_st * 2, n - curlst);
             while(thres_st != thres_ed){
-                int m = (thres_st + thres_ed + 1) / 2;
-                if(finalDist(curlst + 1, curlst + m) <= x){
-                    thres_st = m;
+                int m = (thres_st + thres_ed) / 2;
+                if(finalDist(map.get(curlst).x, map.get(curlst + m).x) <= x){
+                    thres_st = m+1;
                 }
-                else thres_ed = m-1;
+                else thres_ed = m;
             }
             if(thres_st == 0) return (int) 1e9;
             curlst += thres_st;
-            curlst = nxt[curlst];
         }
         return itr;
+    }
+
+    private static boolean isLeftTurn(house a, house b, house c) {
+        // (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)의 부호를 확인하여 좌회전인지 판단
+        return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) > 0;
     }
 
     public static void main(String[] args) throws IOException {
@@ -198,32 +246,11 @@ public class AL_15774_3 {
         while (left < right) {   // Log N
             long mid = (left+right)/2;
 
-            int count = 1;
-            long min = Long.MAX_VALUE;
-            long max = Long.MIN_VALUE;
-            long length = 0;
-
-            for (int i=0; i<n; i++) {     // N
-                min = Math.min(min, map.get(i).x);
-                max = Math.max(max, map.get(i).x);
-                length = finalDist(min, max);  // N Log N
-                if (length > mid) {
-                    count++;
-                    min = Long.MAX_VALUE;
-                    max = Long.MIN_VALUE;
-                    i--;
-                }
-                if (count > k) break;
-            }
-
-            if (count <= k) {
-                right=mid;
-            } else {
-                left=mid+1;
-            }
+            if(trial(mid) <= k) right = mid;
+            else left = mid + 1;
         }
 
 
-        System.out.println(right);
+        System.out.println(left);
     }
 }
