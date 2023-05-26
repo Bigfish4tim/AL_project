@@ -95,6 +95,11 @@ public class AL_15774_3 {
         return convexHull;
     }
 
+    private static boolean isLeftTurn(house a, house b, house c) {
+        // (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)의 부호를 확인하여 좌회전인지 판단
+        return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) > 0;
+    }
+
     public static Stack<house> convexHull(ArrayList<house> input) {
         house root = new house(Long.MAX_VALUE,Long.MAX_VALUE);
 
@@ -181,8 +186,9 @@ public class AL_15774_3 {
         for (int i=0; i<map.size(); i++) {
             if (map.get(i).x >= a && map.get(i).x <= b) houses.add(map.get(i));
         }
-        ArrayList<house> list = new ArrayList<>(convexHull(houses));
-        returns = rotatingCalipers(list);
+//        ArrayList<house> list = new ArrayList<>(convexHull(houses));
+        ArrayList<house> list2 = new ArrayList<>(computeConvexHull(houses));
+        returns = rotatingCalipers(list2);
         return returns;
     }
 
@@ -212,11 +218,6 @@ public class AL_15774_3 {
         return itr;
     }
 
-    private static boolean isLeftTurn(house a, house b, house c) {
-        // (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)의 부호를 확인하여 좌회전인지 판단
-        return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) > 0;
-    }
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -243,7 +244,7 @@ public class AL_15774_3 {
         long left = 0;
         long right = finalDist(map.get(0).x, map.get(n-1).x);
 
-        while (left < right) {   // Log N
+        while (left < right) {
             long mid = (left+right)/2;
 
             if(trial(mid) <= k) right = mid;
@@ -252,5 +253,9 @@ public class AL_15774_3 {
 
 
         System.out.println(left);
+
+//        Runtime.getRuntime().gc();
+//        long usedMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+//        System.out.print(usedMemory + " bytes");
     }
 }
