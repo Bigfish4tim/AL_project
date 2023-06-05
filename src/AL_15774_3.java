@@ -31,7 +31,6 @@ public class AL_15774_3 {
         }
     }
 
-
     static long ccw(house p1, house p2, house p3) {
         return (p1.x * p2.y + p2.x * p3.y + p3.x * p1.y) - (p1.y * p2.x + p2.y * p3.x + p3.y * p1.x);
     }
