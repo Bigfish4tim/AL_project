@@ -41,7 +41,6 @@ public class AL_15774_3 {
         return (dx*dx + dy*dy);
     }
 
-
     public static List<house> computeConvexHull(ArrayList<house> points) {
 
         int n = points.size();
