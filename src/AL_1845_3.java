@@ -10,11 +10,13 @@ public class AL_1845_3 {
     static Stack<range> q = new Stack<>();
 
     public static class point {
-        int num;
+        int head;
+        int tail;
         int index;
 
-        public point(int num, int index) {
-            this.num = num;
+        public point(int head, int tail, int index) {
+            this.head = head;
+            this.tail = tail;
             this.index = index;
         }
     }
@@ -54,46 +56,61 @@ public class AL_1845_3 {
             map[i+1] = scanner.nextInt();
         map[0] = 0;
         map[N+1] = N+1;
-        head = new point(0,0);
-        tail = new point(100000,0);
+        head = new point(0,0,0);
+        tail = new point(100000,100000,0);
 
-        while (tail.num != N+1) {
-            head = new point(0,0);
-            tail = new point(100000,0);
-            for (int i=1; i<N+1; i++) {
-                if (head.num > 0) {
-                    if (head.num+1 == map[i]) continue;
-                    else if (head.num < map[i]) {
-                        head = new point(map[i], i);
-                        tail = new point(map[i+1], i+1);
+        while (tail.tail != N+1) {
+            head = new point(map[1], map[1], 1);
+            tail = new point(map[2], map[2], 2);
+            for (int i=2; i<N+1; i++) {
+                if (head.head > 0) {
+                    if (head.tail+1 == map[i]) {
+                        head = new point(head.head, map[i], head.index);
+                        tail = new point(map[i+1], map[i+1], i+1);
+                        continue;
+                    }
+                    else if (head.tail < Math.abs(map[i])) {
+                        head = new point(map[i], map[i], i);
+                        tail = new point(map[i+1], map[i+1], i+1);
                         continue;
                     } else {
-
+                        while (Math.abs(map[i] - map[i + 1]) == 1) {
+                            tail = new point(tail.head, map[i + 1], i + 1);
+                            i++;
+                        }
+                        reverse(head.index, tail.index);
+                        break;
                     }
                 } else {
+                    if (head.tail - map[i] == -1) {
+                        head = new point(head.head, map[i], head.index);
+                        tail = new point(map[i+1], map[i+1], i+1);
+                        continue;
+                    }
+                    else if (Math.abs(head.head) < Math.abs(map[i])) {
+                        head = new point(map[i], map[i], i);
+                        tail = new point(map[i+1], map[i+1], i+1);
+                        continue;
+                    } else {
+                        while (map[i] - map[i+1] == -1) {
+                            tail = new point(tail.head, map[i+1], i+1);
+                            i++;
+                        }
+                        reverse(head.index, tail.index);
+                        break;
+                    }
+                }
+            }
+        }
 
+        for (int i=1; i<N+1; i++) {
+            if (map[i] < 0) {
+                int from = i, to = i;
+                while (map[i+1] - map[i] == 1) {
+                    i++;
+                    to++;
                 }
-                if (Math.abs(head.num) < Math.abs(map[i])) {
-                    head = new point(map[i], i);
-                    tail = new point(map[i+1], i+1);
-                    continue;
-                }
-                if (tail.num == map[i]) continue;
-                if (map[i] >= 0) {
-                    while (Math.abs(tail.num - map[i]) == 1) {
-                        tail = new point(map[i], i);
-                        i++;
-                    }
-                    reverse(head.index, tail.index);
-                    break;
-                } else {
-                    while (tail.num - map[i] == -1) {
-                        tail = new point(map[i], i);
-                        i++;
-                    }
-                    reverse(head.index, tail.index);
-                    break;
-                }
+                reverse(from, to);
             }
         }
 
@@ -119,4 +136,7 @@ public class AL_1845_3 {
 
 8
 -4 -3 -5 1 2 7 6 8
+
+6
+-4 -3 -5 1 2 6
  */
