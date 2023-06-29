@@ -57,6 +57,5 @@ public class AL_1845_4 {
         map[0] = 0;
         map[N+1] = N+1;
 
-
     }
 }
