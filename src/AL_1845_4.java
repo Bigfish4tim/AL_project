@@ -56,7 +56,5 @@ public class AL_1845_4 {
             map[i+1] = scanner.nextInt();
         map[0] = 0;
         map[N+1] = N+1;
-
     }
-
 }
