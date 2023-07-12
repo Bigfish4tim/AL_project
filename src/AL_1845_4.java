@@ -49,7 +49,6 @@ public class AL_1845_4 {
         Scanner scanner = new Scanner(System.in);
 
         N = scanner.nextInt();
-
         map = new int[N+2];
 
         for (int i=0; i<N; i++)
