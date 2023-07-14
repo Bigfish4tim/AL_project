@@ -31,7 +31,6 @@ public class AL_1845_4 {
         }
     }
 
-
     public static void reverse(int a, int b) {
         int range = (b-a+1);
         int size = (int) Math.ceil((double) range / 2);
