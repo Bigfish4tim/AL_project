@@ -45,6 +45,7 @@ public class AL_1845_4 {
         q.add(new range(a,b));
     }
 
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
