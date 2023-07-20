@@ -31,6 +31,32 @@ public class AL_1845_4 {
         }
     }
 
+    public static int continuityFInd() {
+        int[] dp = new int[map.length];
+
+        for (int i=1; i< map.length; i++) {
+            if (map[i]-1 == map[i-1]) {
+                dp[i] = dp[i-1]+1;
+            }
+        }
+
+        int MAX = 0;
+        for (int length : dp) {
+            MAX = Math.max(MAX, length);
+        }
+
+        return MAX+1;
+    }
+
+    public static void evenFind(int point) {
+        int start = map[point-1];
+        int end = map[point+1];
+
+        for (int i=1; i< map.length; i++) {
+
+        }
+    }
+
     public static void reverse(int a, int b) {
         int range = (b-a+1);
         int size = (int) Math.ceil((double) range / 2);
@@ -56,5 +82,6 @@ public class AL_1845_4 {
             map[i+1] = scanner.nextInt();
         map[0] = 0;
         map[N+1] = N+1;
+
     }
 }
