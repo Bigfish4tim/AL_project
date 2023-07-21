@@ -48,15 +48,6 @@ public class AL_1845_4 {
         return MAX+1;
     }
 
-    public static void evenFind(int point) {
-        int start = map[point-1];
-        int end = map[point+1];
-
-        for (int i=1; i< map.length; i++) {
-
-        }
-    }
-
     public static void reverse(int a, int b) {
         int range = (b-a+1);
         int size = (int) Math.ceil((double) range / 2);
