@@ -19,5 +19,6 @@ public class AL_2834 {
             oriMap[i] = i+1;
 
 
+
     }
 }
