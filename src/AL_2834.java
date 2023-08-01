@@ -55,6 +55,7 @@ public class AL_2834 {
 
             int[] tempInt = new int[N+1];
             tempInt[0] = 0;
+            tempInt = map.clone();
             for (int i=0; i<temp.getSize()-1; i++)
                 tempInt[temp.elements.get(i+1)] = map[temp.elements.get(i)];
             tempInt[temp.elements.get(0)] = map[temp.elements.get(temp.getSize()-1)];
@@ -85,9 +86,9 @@ public class AL_2834 {
                 System.out.println();
             }
 
-            for (int j : map) {
-                System.out.print(j + " ");
-            }
+//            for (int j : map) {
+//                System.out.print(j + " ");
+//            }
         } else if (cycles.size() > 0) {
             System.out.println(cycles.size());
             for (Cycle cycle:cycles) {
@@ -132,6 +133,9 @@ public class AL_2834 {
 
 8
 8 7 6 5 4 3 2 1
+
+9
+3 2 1 6 5 4 9 8 7
 
 
  */
