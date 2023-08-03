@@ -68,6 +68,7 @@ public class AL_2834 {
                 cycles3rd.add(cycles.get(0));
             }
 
+
             temp = cycles.get(0);
 
             for (int i=0; i<temp.getSize()-1; i++) {
