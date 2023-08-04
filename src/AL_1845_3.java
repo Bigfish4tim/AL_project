@@ -41,7 +41,6 @@ public class AL_1845_3 {
             map[a+i] = -map[b-i];
             map[b-i] = -temp;
         }
-
         q.add(new range(a,b));
     }
 
