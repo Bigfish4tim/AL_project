@@ -59,6 +59,7 @@ public class AL_1845_3 {
         tail = new point(100000,100000,0);
 
         while (tail.tail != N+1) {
+
             head = new point(map[1], map[1], 1);
             tail = new point(map[2], map[2], 2);
             for (int i=2; i<N+1; i++) {
