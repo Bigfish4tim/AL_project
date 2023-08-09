@@ -32,6 +32,12 @@ public class AL_27089 {
             map[i] = new Operator(x, y, sight);
         }
 
+        int[] counts = new int[N];
 
+        int[] perm = new int[N];
+
+        for (int i=0; i<N; i++) {
+            map[i].sight
+        }
     }
 }
