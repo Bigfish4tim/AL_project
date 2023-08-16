@@ -4,6 +4,7 @@ public class AL_27089 {
 
     static int N;
     static long K;
+    static Operator[] map;
 
     public static class Operator {
         int x;
@@ -16,6 +17,29 @@ public class AL_27089 {
             this.y = y;
             this.upSight = upSight;
             this.downSight = downSight;
+        }
+    }
+
+    public static class Cycle {
+        ArrayList<Integer> elements;
+
+        public Cycle() {
+            elements = new ArrayList<>();
+        }
+
+        public void addElement(int element) {
+            elements.add(element);
+        }
+
+        public void printCycle() {
+            for (int element : elements) {
+                System.out.print(element + " ");
+            }
+            System.out.println();
+        }
+
+        public int getSize() {
+            return elements.size();
         }
     }
 
@@ -51,7 +75,7 @@ public class AL_27089 {
         N = scanner.nextInt();
         K = scanner.nextLong();
 
-        Operator[] map = new Operator[N];
+        map = new Operator[N];
 
         for (int i=0; i<N; i++) {
             int x = scanner.nextInt();
@@ -73,6 +97,64 @@ public class AL_27089 {
         int[] perm = new int[N];
 
         int[] shootRange = new int[N];
+
+
+        int start, end;
+
+        start = 0;
+        end = -1;
+
+        boolean[] visit = new boolean[N];
+
+        ArrayList<Integer> shoots = new ArrayList<>();
+
+
+        for (int i=1; i<N+1; i++) {
+            if (!visit[i]) {
+                AL_2834.Cycle cycle = new AL_2834.Cycle();
+                int current = i;
+
+                while (!visit[current]) {
+                    visit[current] = true;
+                    cycle.addElement(map[current]);
+                    current = map[current];
+                }
+
+                if (cycle.getSize() > 1) {
+                    output.add(cycle);
+                }
+            }
+        }
+
+        Cycle cycle = new Cycle();
+        int current = 0;
+
+        while (!visit[current]) {
+            visit[current] = true;
+        }
+
+        while (start == end) {
+            for (int i=0; i<N; i++) {
+                if (i==j) continue;
+
+                double deg = degrees(map[j], map[i]);
+
+                if (deg <= map[j].upSight && deg >= map[j].downSight)
+                    shootRange[i] += taxiDistance(map[j], map[i]);
+            }
+        }
+
+        for (int i=0; i<N; i++) {
+
+        }
+
+
+
+        /*
+
+         */
+
+
 
         for (int i=0; i<N; i++) {
             for (int j=0; j<N; j++) {
@@ -117,6 +199,48 @@ public class AL_27089 {
         for (int i=0; i<N; i++) {
             System.out.println(counts[i]%998244353);
         }
+    }
+
+    public static int AtkPoint(int index) {
+        int output = 0;
+        for (int i=0; i<N; i++) {
+            if (index==i) continue;
+
+            double deg = degrees(map[i], map[index]);
+
+            if (deg <= map[i].upSight && deg >= map[i].downSight)
+                shootRange[index] += taxiDistance(map[i], map[index]);
+        }
+
+        return output;
+    }
+
+    public static int NextTarget(int index) {
+        double dist = Double.MAX_VALUE;
+        int output = -1;
+        for (int i = 0; i<N; i++) {
+            if (index == i) continue;
+
+            double deg = degrees(map[index], map[i]);
+
+            if (deg <= map[index].upSight && deg >= map[index].downSight) {
+                double tempDist = calculateDistance(map[index], map[i]);
+                if (dist > tempDist) {
+                    dist = tempDist;
+                    output = i;
+                }
+            } else if (map[index].upSight == 360.0 && deg == 0.0) {
+                double tempDist = calculateDistance(map[index], map[i]);
+                if (dist > tempDist) {
+                    dist = tempDist;
+                    output = i;
+                }
+            }
+        }
+        if (output == -1) {
+            return (index+1) % N;
+        }
+        return output;
     }
 }
 
