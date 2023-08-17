@@ -69,152 +69,6 @@ public class AL_27089 {
         return angleDegrees;
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        N = scanner.nextInt();
-        K = scanner.nextLong();
-
-        map = new Operator[N];
-
-        for (int i=0; i<N; i++) {
-            int x = scanner.nextInt();
-            int y = scanner.nextInt();
-            int sight = scanner.nextInt();
-
-            if (sight == 0)
-                map[i] = new Operator(x, y, 360.0, 270.0);
-            else if (sight == 1)
-                map[i] = new Operator(x, y, 180.0, 90.0);
-            else if (sight == 2)
-                map[i] = new Operator(x, y, 90.0, 0.0);
-            else if (sight == 3)
-                map[i] = new Operator(x, y, 270.0, 180.0);
-        }
-
-        int[] counts = new int[N];
-
-        int[] perm = new int[N];
-
-        int[] shootRange = new int[N];
-
-
-        int start, end;
-
-        start = 0;
-        end = -1;
-
-        boolean[] visit = new boolean[N];
-
-        ArrayList<Integer> shoots = new ArrayList<>();
-
-
-        for (int i=1; i<N+1; i++) {
-            if (!visit[i]) {
-                AL_2834.Cycle cycle = new AL_2834.Cycle();
-                int current = i;
-
-                while (!visit[current]) {
-                    visit[current] = true;
-                    cycle.addElement(map[current]);
-                    current = map[current];
-                }
-
-                if (cycle.getSize() > 1) {
-                    output.add(cycle);
-                }
-            }
-        }
-
-        Cycle cycle = new Cycle();
-        int current = 0;
-
-        while (!visit[current]) {
-            visit[current] = true;
-        }
-
-        while (start == end) {
-            for (int i=0; i<N; i++) {
-                if (i==j) continue;
-
-                double deg = degrees(map[j], map[i]);
-
-                if (deg <= map[j].upSight && deg >= map[j].downSight)
-                    shootRange[i] += taxiDistance(map[j], map[i]);
-            }
-        }
-
-        for (int i=0; i<N; i++) {
-
-        }
-
-
-
-        /*
-
-         */
-
-
-
-        for (int i=0; i<N; i++) {
-            for (int j=0; j<N; j++) {
-                if (i==j) continue;
-
-                double deg = degrees(map[j], map[i]);
-
-                if (deg <= map[j].upSight && deg >= map[j].downSight)
-                    shootRange[i] += taxiDistance(map[j], map[i]);
-            }
-
-            double dist = Double.MAX_VALUE;
-            for (int j = 0; j<N; j++) {
-
-                if (i == j) continue;
-
-                double deg = degrees(map[i], map[j]);
-
-                if (deg <= map[i].upSight && deg >= map[i].downSight) {
-                    double tempDist = calculateDistance(map[i], map[j]);
-                    if (dist > tempDist) {
-                        dist = tempDist;
-                        perm[i] = j;
-                    }
-                } else if (map[i].upSight == 360.0 && deg == 0.0) {
-                    double tempDist = calculateDistance(map[i], map[j]);
-                    if (dist > tempDist) {
-                        dist = tempDist;
-                        perm[i] = j;
-                    }
-                }
-            }
-        }
-
-        int point = 0;
-
-        for (int i=0; i<K; i++) {
-            counts[point] += shootRange[point];
-            point = perm[point];
-        }
-
-        for (int i=0; i<N; i++) {
-            System.out.println(counts[i]%998244353);
-        }
-    }
-
-    public static int AtkPoint(int index) {
-        int output = 0;
-        for (int i=0; i<N; i++) {
-            if (index==i) continue;
-
-            double deg = degrees(map[i], map[index]);
-
-            if (deg <= map[i].upSight && deg >= map[i].downSight)
-                shootRange[index] += taxiDistance(map[i], map[index]);
-        }
-
-        return output;
-    }
-
     public static int NextTarget(int index) {
         double dist = Double.MAX_VALUE;
         int output = -1;
@@ -242,5 +96,81 @@ public class AL_27089 {
         }
         return output;
     }
+
+    public static int AtkPoint(int index) {
+        int output = 0;
+        for (int i=0; i<N; i++) {
+            if (index==i) continue;
+
+            double deg = degrees(map[i], map[index]);
+
+            if (deg <= map[i].upSight && deg >= map[i].downSight)
+                output += taxiDistance(map[i], map[index]);
+        }
+
+        return output;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        N = scanner.nextInt();
+        K = scanner.nextLong();
+
+        map = new Operator[N];
+
+        for (int i=0; i<N; i++) {
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            int sight = scanner.nextInt();
+
+            if (sight == 0)
+                map[i] = new Operator(x, y, 360.0, 270.0);
+            else if (sight == 1)
+                map[i] = new Operator(x, y, 180.0, 90.0);
+            else if (sight == 2)
+                map[i] = new Operator(x, y, 90.0, 0.0);
+            else if (sight == 3)
+                map[i] = new Operator(x, y, 270.0, 180.0);
+        }
+
+        long[] perm = new long[N];
+
+        int[] shootRange = new int[N];
+
+        boolean[] visit = new boolean[N];
+
+        Cycle cycle = new Cycle();
+        int current = 0;
+        int length = 0;
+
+        while (!visit[current]) {
+            visit[current] = true;
+            int temp = NextTarget(current);
+            cycle.addElement(temp);
+            shootRange[current] = AtkPoint(current);
+            length++;
+            current = temp;
+        }
+
+        long share = (K / length);
+        long remainder = K % length;
+
+        for (int i=0; i<N; i++)
+            perm[i] = share * shootRange[i];
+
+        for (int i=0; i<remainder; i++)
+            perm[i] += shootRange[i];
+
+        for (int i=0; i<N; i++) {
+            System.out.println(perm[i]%998244353);
+        }
+    }
 }
 
+/*
+3 4
+1 0 0
+2 0 3
+3 0 1
+ */
