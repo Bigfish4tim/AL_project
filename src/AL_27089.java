@@ -143,14 +143,27 @@ public class AL_27089 {
         Cycle cycle = new Cycle();
         int current = 0;
         int length = 0;
+        int temp = 0;
+
+        ArrayList<Integer> cycles = new ArrayList<>();
 
         while (!visit[current]) {
             visit[current] = true;
-            int temp = NextTarget(current);
-            cycle.addElement(temp);
+            temp = NextTarget(current);
+//            cycle.addElement(temp);
+            cycles.add(temp);
             shootRange[current] = AtkPoint(current);
-            length++;
             current = temp;
+        }
+
+        ArrayList<Integer> tempArr = new ArrayList<>();
+
+//        int start = cycles.get(temp);
+
+        int start = cycles.get(temp);
+
+        for (int i=start; i<N; i++) {
+            tempArr.add(cycles.get(i));
         }
 
         long share = (K / length);
@@ -173,4 +186,10 @@ public class AL_27089 {
 1 0 0
 2 0 3
 3 0 1
+
+4 4
+1 0 0
+2 0 3
+3 0 3
+4 0 1
  */
