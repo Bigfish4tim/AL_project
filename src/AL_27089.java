@@ -20,26 +20,13 @@ public class AL_27089 {
         }
     }
 
-    public static class Cycle {
-        ArrayList<Integer> elements;
+    public static class Point {
+        int from;
+        int to;
 
-        public Cycle() {
-            elements = new ArrayList<>();
-        }
-
-        public void addElement(int element) {
-            elements.add(element);
-        }
-
-        public void printCycle() {
-            for (int element : elements) {
-                System.out.print(element + " ");
-            }
-            System.out.println();
-        }
-
-        public int getSize() {
-            return elements.size();
+        public Point(int from, int to) {
+            this.from = from;
+            this.to = to;
         }
     }
 
@@ -140,40 +127,58 @@ public class AL_27089 {
 
         boolean[] visit = new boolean[N];
 
-        Cycle cycle = new Cycle();
         int current = 0;
         int length = 0;
         int temp = 0;
 
         ArrayList<Integer> cycles = new ArrayList<>();
 
+        ArrayList<Point> cycle = new ArrayList<>();
+
         while (!visit[current]) {
             visit[current] = true;
             temp = NextTarget(current);
-//            cycle.addElement(temp);
+            cycle.add(new Point(current, temp));
             cycles.add(temp);
             shootRange[current] = AtkPoint(current);
+            length++;
             current = temp;
         }
 
-        ArrayList<Integer> tempArr = new ArrayList<>();
+        ArrayList<Point> tempArr = new ArrayList<>();
 
 //        int start = cycles.get(temp);
 
-        int start = cycles.get(temp);
+        // 기존 케이스로 테ㅐ스트시 문제 발생
+//        for (int i=current; i< cycles.size(); i++) {
+//            tempArr.add(new Point(i, cycles.get(i)));
+//        }
 
-        for (int i=start; i<N; i++) {
-            tempArr.add(cycles.get(i));
+        for (int i=current; i<cycle.size(); i++) {
+            Point t = cycle.get(i);
+            tempArr.add(new Point(t.from, t.to));
         }
 
-        long share = (K / length);
-        long remainder = K % length;
+        int remLength = length - tempArr.size();
 
-        for (int i=0; i<N; i++)
-            perm[i] = share * shootRange[i];
+        int stp = 0;
+        for (int i=0; i<remLength; i++) {
+            perm[stp] += shootRange[stp];
+            stp = cycles.get(stp);
+        }
 
-        for (int i=0; i<remainder; i++)
-            perm[i] += shootRange[i];
+        K -= remLength;
+
+        long share = (K / tempArr.size());
+        long remainder = K % tempArr.size();
+
+        for (int i=0; i<tempArr.size(); i++) {
+            perm[tempArr.get(i).from] += share * shootRange[tempArr.get(i).from];
+        }
+
+        for (int i=0; i<remainder; i++) {
+            perm[tempArr.get(i).from] += shootRange[tempArr.get(i).from];
+        }
 
         for (int i=0; i<N; i++) {
             System.out.println(perm[i]%998244353);
@@ -182,12 +187,24 @@ public class AL_27089 {
 }
 
 /*
+4 4
+2 5 0
+1 5 2
+4 6 3
+7 2 1
+
 3 4
 1 0 0
 2 0 3
 3 0 1
 
 4 4
+1 0 0
+2 0 3
+3 0 3
+4 0 1
+
+4 5
 1 0 0
 2 0 3
 3 0 3
