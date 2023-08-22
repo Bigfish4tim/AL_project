@@ -131,15 +131,12 @@ public class AL_27089 {
         int length = 0;
         int temp = 0;
 
-        ArrayList<Integer> cycles = new ArrayList<>();
-
         ArrayList<Point> cycle = new ArrayList<>();
 
         while (!visit[current]) {
             visit[current] = true;
             temp = NextTarget(current);
             cycle.add(new Point(current, temp));
-            cycles.add(temp);
             shootRange[current] = AtkPoint(current);
             length++;
             current = temp;
@@ -147,16 +144,12 @@ public class AL_27089 {
 
         ArrayList<Point> tempArr = new ArrayList<>();
 
-//        int start = cycles.get(temp);
-
-        // 기존 케이스로 테ㅐ스트시 문제 발생
-//        for (int i=current; i< cycles.size(); i++) {
-//            tempArr.add(new Point(i, cycles.get(i)));
-//        }
-
-        for (int i=current; i<cycle.size(); i++) {
+        for (int i=0; i<cycle.size(); i++) {
             Point t = cycle.get(i);
-            tempArr.add(new Point(t.from, t.to));
+            if (t.from == current) {
+                tempArr.add(new Point(t.from, t.to));
+                current = t.to;
+            }
         }
 
         int remLength = length - tempArr.size();
@@ -164,7 +157,7 @@ public class AL_27089 {
         int stp = 0;
         for (int i=0; i<remLength; i++) {
             perm[stp] += shootRange[stp];
-            stp = cycles.get(stp);
+            stp = cycle.get(stp).to;
         }
 
         K -= remLength;
@@ -172,12 +165,14 @@ public class AL_27089 {
         long share = (K / tempArr.size());
         long remainder = K % tempArr.size();
 
-        for (int i=0; i<tempArr.size(); i++) {
-            perm[tempArr.get(i).from] += share * shootRange[tempArr.get(i).from];
-        }
+        if (tempArr.size() != 0) {
+            for (int i=0; i<tempArr.size(); i++) {
+                perm[tempArr.get(i).from] += share * shootRange[tempArr.get(i).from];
+            }
 
-        for (int i=0; i<remainder; i++) {
-            perm[tempArr.get(i).from] += shootRange[tempArr.get(i).from];
+            for (int i=0; i<remainder; i++) {
+                perm[tempArr.get(i).from] += shootRange[tempArr.get(i).from];
+            }
         }
 
         for (int i=0; i<N; i++) {
@@ -193,12 +188,12 @@ public class AL_27089 {
 4 6 3
 7 2 1
 
-3 4
+3 10
 1 0 0
 2 0 3
 3 0 1
 
-4 4
+4 10
 1 0 0
 2 0 3
 3 0 3
