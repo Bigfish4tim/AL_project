@@ -157,7 +157,7 @@ public class AL_27089 {
         int stp = 0;
         for (int i=0; i<remLength; i++) {
             perm[stp] += shootRange[stp];
-            stp = cycle.get(stp).to;
+            stp = cycle.get(i).to;
         }
 
         K -= remLength;
@@ -180,29 +180,3 @@ public class AL_27089 {
         }
     }
 }
-
-
-/*
-4 4
-2 5 0
-1 5 2
-4 6 3
-7 2 1
-
-3 10
-1 0 0
-2 0 3
-3 0 1
-
-4 10
-1 0 0
-2 0 3
-3 0 3
-4 0 1
-
-4 5
-1 0 0
-2 0 3
-3 0 3
-4 0 1
- */
