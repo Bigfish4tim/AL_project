@@ -162,6 +162,7 @@ public class AL_27089 {
 
         K -= remLength;
 
+
         long share = (K / tempArr.size());
         long remainder = K % tempArr.size();
 
