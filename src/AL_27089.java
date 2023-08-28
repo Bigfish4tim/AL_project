@@ -30,13 +30,6 @@ public class AL_27089 {
         }
     }
 
-    public static double calculateDistance(Operator a1, Operator a2) {
-        double deltaX = a2.x - a1.x;
-        double deltaY = a2.y - a1.y;
-
-        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    }
-
     public static int taxiDistance(Operator a1, Operator a2) {
         int deltaX = a2.x - a1.x;
         int deltaY = a2.y - a1.y;
@@ -57,7 +50,7 @@ public class AL_27089 {
     }
 
     public static int NextTarget(int index) {
-        double dist = Double.MAX_VALUE;
+        int dist = Integer.MAX_VALUE;
         int output = -1;
         for (int i = 0; i<N; i++) {
             if (index == i) continue;
@@ -65,16 +58,24 @@ public class AL_27089 {
             double deg = degrees(map[index], map[i]);
 
             if (deg <= map[index].upSight && deg >= map[index].downSight) {
-                double tempDist = calculateDistance(map[index], map[i]);
+                int tempDist = taxiDistance(map[index], map[i]);
                 if (dist > tempDist) {
                     dist = tempDist;
                     output = i;
+                } else if (dist == tempDist) {
+                    if (output >= i) {
+                        output = i;
+                    }
                 }
             } else if (map[index].upSight == 360.0 && deg == 0.0) {
-                double tempDist = calculateDistance(map[index], map[i]);
+                int tempDist = taxiDistance(map[index], map[i]);
                 if (dist > tempDist) {
                     dist = tempDist;
                     output = i;
+                } else if (dist == tempDist) {
+                    if (output >= i) {
+                        output = i;
+                    }
                 }
             }
         }
@@ -161,7 +162,6 @@ public class AL_27089 {
         }
 
         K -= remLength;
-
 
         long share = (K / tempArr.size());
         long remainder = K % tempArr.size();
