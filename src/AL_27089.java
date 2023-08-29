@@ -161,6 +161,7 @@ public class AL_27089 {
             stp = cycle.get(i).to;
         }
 
+
         K -= remLength;
 
         long share = (K / tempArr.size());
