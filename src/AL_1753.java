@@ -64,6 +64,7 @@ public class AL_1753 {
         pq.add(new Node(start, 0));
 
         while(!pq.isEmpty()) {
+
             Node now = pq.poll();
 
             int len = l[now.v].size();
