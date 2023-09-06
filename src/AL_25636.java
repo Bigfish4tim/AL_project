@@ -105,7 +105,6 @@ public class AL_25636 {
             water[i] = sc.nextInt();
         }
 
-
         roadCount = sc.nextInt();
 
         ArrayList<ArrayList<Node>> graphs = new ArrayList<>();
