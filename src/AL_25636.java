@@ -126,7 +126,6 @@ public class AL_25636 {
 
         fireStation = sc.nextInt();
         fireLocation = sc.nextInt();
-
         Result ans = dijFunc(map, fireStation, water);
 
         if(ans.result.get(fireLocation) == Integer.MAX_VALUE) {
