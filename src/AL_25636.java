@@ -4,34 +4,24 @@ public class AL_25636 {
 
     public static class Node implements Comparable<Node> {
         Integer vertex;
-        int weight;
+        long weight;
 
-        public Node(Integer vertex, int weight) {
+        public Node(Integer vertex, long weight) {
             this.vertex = vertex;
             this.weight = weight;
         }
 
         @Override
         public int compareTo(Node o) {
-            return this.weight - o.weight;
-        }
-    }
-
-    public static class Node2 {
-        Integer cross;
-        Integer water;
-
-        public Node2(Integer cross, int water) {
-            this.cross = cross;
-            this.water = water;
+            return Long.compare(this.weight, o.weight);
         }
     }
 
     public static class Result {
-        Map<Integer, Integer> result;
-        Map<Integer, Integer> waterSum;
+        Map<Integer, Long> result;
+        Map<Integer, Long> waterSum;
 
-        public Result(Map<Integer, Integer> result, Map<Integer, Integer> waterSum) {
+        public Result(Map<Integer, Long> result, Map<Integer, Long> waterSum) {
             this.result = result;
             this.waterSum = waterSum;
         }
@@ -39,14 +29,14 @@ public class AL_25636 {
 
     public static Result dijFunc(Map<Integer, ArrayList<Node>> map, Integer start, int[] waters) {
         PriorityQueue<Node> pq = new PriorityQueue<>();
-        Map<Integer, Integer> result = new HashMap<>();
+        Map<Integer, Long> result = new HashMap<>();
         Node pqNode;
         ArrayList<Node> nodeList;
 
         for(Integer key : map.keySet()) {
-            result.put(key, Integer.MAX_VALUE);
+            result.put(key, Long.MAX_VALUE);
         }
-        result.put(start, 0);
+        result.put(start, 0L);
         pq.add(new Node(start, 0));
 
         Map<Integer, Integer> waterMap = new HashMap<>();
@@ -55,12 +45,12 @@ public class AL_25636 {
             waterMap.put(i+1, waters[i]);
         }
 
-        Map<Integer, Integer> waterSum = new HashMap<>();
+        Map<Integer, Long> waterSum = new HashMap<>();
 
         for(int i=0; i<waters.length; i++) {
-            waterSum.put(i+1, 0);
+            waterSum.put(i+1, 0L);
         }
-        waterSum.put(start, waters[start-1]);
+        waterSum.put(start, (long) waters[start-1]);
 
         while (!pq.isEmpty()) {
             pqNode = pq.poll();
@@ -70,14 +60,20 @@ public class AL_25636 {
             nodeList = map.get(pqNode.vertex);
 
             for(Node searchNode : nodeList) {
-                int newWeight = searchNode.weight + pqNode.weight;
-                if(newWeight <= result.get(searchNode.vertex)) {
+                long newWeight = searchNode.weight + pqNode.weight;
+                if(newWeight < result.get(searchNode.vertex)) {
                     result.put(searchNode.vertex, newWeight);
                     pq.add(new Node(searchNode.vertex, newWeight));
 
-                    int totalwater = waterMap.get(searchNode.vertex) + waterSum.get(pqNode.vertex);
+                    long totalwater = waterMap.get(searchNode.vertex) + waterSum.get(pqNode.vertex);
+                    waterSum.put(searchNode.vertex, totalwater);
+
+                } else if (newWeight == result.get(searchNode.vertex)) {
+                    long totalwater = waterMap.get(searchNode.vertex) + waterSum.get(pqNode.vertex);
                     if(totalwater > waterSum.get(searchNode.vertex)) {
                         waterSum.put(searchNode.vertex, totalwater);
+                        result.put(searchNode.vertex, newWeight);
+                        pq.add(new Node(searchNode.vertex, newWeight));
                     }
                 }
             }
