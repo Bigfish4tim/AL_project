@@ -3,7 +3,7 @@ import java.util.*;
 public class AL_25636_2 {
 
     public static class Node implements Comparable<Node> {
-        Integer vertex;
+        int vertex;
         long weight;
 
         public Node(Integer vertex, long weight) {
@@ -87,9 +87,9 @@ public class AL_25636_2 {
     static int roadCount;
     static int fireStation;
     static int fireLocation;
+    static Map<Integer, ArrayList<Node>> graph = new HashMap<>();
 
     public static void main(String[] args) {
-        Map<Integer, ArrayList<Node>> graph = new HashMap<>();
 
         Scanner sc = new Scanner(System.in);
 
@@ -117,5 +117,44 @@ public class AL_25636_2 {
 
         fireStation = sc.nextInt();
         fireLocation = sc.nextInt();
+    }
+
+    public static class Amount {
+        long weightAmount;
+        long waterAmount;
+
+        public Amount(long weightAmount, long waterAmount) {
+            this.weightAmount = weightAmount;
+            this.waterAmount = waterAmount;
+        }
+    }
+
+    public static void dij() {
+        Amount[] distances = new Amount[cross+1];
+        Arrays.fill(distances, new Amount(Long.MAX_VALUE, 0));
+        distances[fireStation].weightAmount = 0;
+        distances[fireStation].waterAmount = water[fireStation];
+
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(fireStation, 0));
+
+        while (!pq.isEmpty()) {
+            Node currentNode = pq.poll();
+            int current = currentNode.vertex;
+            long currentDistance = currentNode.weight;
+            long currentWater = distances[current].waterAmount;
+
+            if (currentDistance > distances[current].weightAmount) {
+                continue;
+            }
+
+            for (Node neighbor : graph.get(current)) {
+                long newDistance = currentDistance + neighbor.weight;
+                if (newDistance < distances[neighbor.vertex].weightAmount) {
+                    distances[neighbor.vertex].weightAmount = newDistance;
+                    pq.add(new Node(neighbor.vertex, newDistance));
+                }
+            }
+        }
     }
 }
