@@ -34,6 +34,7 @@ public class AL_25636_2 {
     static int fireLocation;
     static Map<Integer, ArrayList<Node>> graph = new HashMap<>();
 
+
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
