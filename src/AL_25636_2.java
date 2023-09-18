@@ -111,7 +111,6 @@ public class AL_25636_2 {
                 }
             }
         }
-
         return distances;
     }
 }
