@@ -90,9 +90,8 @@ public class AL_25636_2 {
             long currentDistance = currentNode.weight;
             long currentWater = distances[current].waterAmount;
 
-            if (currentDistance > distances[current].weightAmount) {
+            if (currentDistance > distances[current].weightAmount)
                 continue;
-            }
 
             for (Node neighbor : graph.get(current)) {
                 long newDistance = currentDistance + neighbor.weight;
