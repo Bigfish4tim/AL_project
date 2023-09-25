@@ -84,6 +84,7 @@ public class AL_25636_2 {
         PriorityQueue<Node> pq = new PriorityQueue<>();
         pq.add(new Node(fireStation, 0));
 
+
         while (!pq.isEmpty()) {
             Node currentNode = pq.poll();
             int current = currentNode.vertex;
