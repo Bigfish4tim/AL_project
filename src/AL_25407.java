@@ -10,5 +10,6 @@ public class AL_25407 {
         Scanner scanner = new Scanner(System.in);
 
         N = scanner.nextInt();
+
     }
 }
