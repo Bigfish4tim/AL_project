@@ -35,6 +35,24 @@ public class AL_25407 {
             graph.get(i).add(new Node(from, length));
         }
 
+        ArrayList<Integer> vGraph  = new ArrayList<>();
+        vGraph.add(-1);
+
+        for (int i=1; i<=N; i++) {
+            if (graph.get(i).size() == 1) {
+                vGraph.add(i);
+            }
+        }
+
+        for (int i=1; i<=vGraph.size()-1; i++) {
+            int from = vGraph.get(i);
+            int to = vGraph.get(i%(vGraph.size()-1) + 1);
+            int length = scanner.nextInt();
+
+            graph.get(from).add(new Node(to, length));
+            graph.get(to).add(new Node(from, length));
+        }
+
         System.out.println(graph.get(1));
 
     }
