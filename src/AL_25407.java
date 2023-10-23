@@ -54,6 +54,5 @@ public class AL_25407 {
         }
 
         System.out.println(graph.get(1));
-
     }
 }
