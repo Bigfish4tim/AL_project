@@ -53,6 +53,13 @@ public class AL_25407 {
             graph.get(to).add(new Node(from, length));
         }
 
+        k = scanner.nextInt();
+
+        int[] ans = new int[k];
+
+        for (int i=0; i<k; i++) {
+
+        }
         System.out.println(graph.get(1));
     }
 }
