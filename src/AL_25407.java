@@ -62,4 +62,8 @@ public class AL_25407 {
         }
         System.out.println(graph.get(1));
     }
+
+    public static void dij(int start, int end) {
+
+    }
 }
