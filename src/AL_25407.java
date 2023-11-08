@@ -61,6 +61,12 @@ public class AL_25407 {
         }
     }
     public static void dij(int start, int end) {
+        PriorityQueue<Node> q = new PriorityQueue<>(Comparator.comparingInt(node -> node.distance));
+        q.add(new Node(start, 0));
+
+        while (!q.isEmpty()) {
+            Node currentNode = q.poll();
+        }
 
     }
 }
