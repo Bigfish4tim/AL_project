@@ -17,11 +17,14 @@ public class AL_25407 {
     }
 
     static Map<Integer, List<Node>> graph = new HashMap<>();
+    static int[][] distances;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         N = scanner.nextInt();
+
+        distances = new int[N+1][N+1];
 
         for (int i=1; i<=N; i++) {
             graph.put(i, new ArrayList<>());
@@ -63,9 +66,23 @@ public class AL_25407 {
     public static void dij(int start, int end) {
         PriorityQueue<Node> q = new PriorityQueue<>(Comparator.comparingInt(node -> node.distance));
         q.add(new Node(start, 0));
+        int[] distances = new int[N+1];
+        distances[start] = 0;
 
         while (!q.isEmpty()) {
             Node currentNode = q.poll();
+            int current = currentNode.node;
+            int currentDistance = currentNode.distance;
+
+            if (currentDistance > distances[current]) continue;
+
+            for (Node neighbor : graph.get(current)) {
+                int newDistance = currentDistance + neighbor.distance;
+                if (newDistance < distances[neighbor.node]) {
+                    distances[neighbor.node] = newDistance;
+                    q.add(new Node(neighbor.distance, newDistance));
+                }
+            }
         }
 
     }
