@@ -17,14 +17,14 @@ public class AL_25407 {
     }
 
     static Map<Integer, List<Node>> graph = new HashMap<>();
-    static int[][] distances;
+    static int[][] mainDistances;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         N = scanner.nextInt();
 
-        distances = new int[N+1][N+1];
+        mainDistances = new int[N+1][N+1];
 
         for (int i=1; i<=N; i++) {
             graph.put(i, new ArrayList<>());
@@ -61,6 +61,7 @@ public class AL_25407 {
         int[] ans = new int[k];
 
         for (int i=0; i<k; i++) {
+
         }
     }
     public static void dij(int start, int end) {
@@ -85,5 +86,6 @@ public class AL_25407 {
             }
         }
 
+        mainDistances[start] = distances;
     }
 }
