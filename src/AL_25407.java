@@ -57,7 +57,6 @@ public class AL_25407 {
         }
 
         k = scanner.nextInt();
-
         int[] ans = new int[k];
 
         for (int i=0; i<k; i++) {
