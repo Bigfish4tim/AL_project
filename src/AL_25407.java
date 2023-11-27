@@ -60,6 +60,7 @@ public class AL_25407 {
         int[] ans = new int[k];
 
         for (int i=0; i<k; i++) {
+
         }
     }
     public static void dij(int start) {
@@ -72,9 +73,7 @@ public class AL_25407 {
             Node currentNode = q.poll();
             int current = currentNode.node;
             int currentDistance = currentNode.distance;
-
             if (currentDistance > distances[current]) continue;
-
             for (Node neighbor : graph.get(current)) {
                 int newDistance = currentDistance + neighbor.distance;
                 if (newDistance < distances[neighbor.node]) {
