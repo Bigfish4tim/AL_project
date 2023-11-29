@@ -73,7 +73,6 @@ public class AL_25407 {
             Node currentNode = q.poll();
             int current = currentNode.node;
             int currentDistance = currentNode.distance;
-
             if (currentDistance > distances[current]) continue;
 
             for (Node neighbor : graph.get(current)) {
