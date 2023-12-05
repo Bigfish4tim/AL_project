@@ -38,7 +38,6 @@ public class AL_25407 {
 
         ArrayList<Integer> vGraph  = new ArrayList<>();
         vGraph.add(-1);
-
         for (int i=1; i<=N; i++) {
             if (graph.get(i).size() == 1) {
                 vGraph.add(i);
