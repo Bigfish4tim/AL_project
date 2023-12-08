@@ -3,7 +3,6 @@ import java.util.*;
 public class AL_25407 {
 
     static int N;
-
     static int k;
 
     public static class Node {
