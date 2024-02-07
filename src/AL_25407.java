@@ -56,7 +56,6 @@ public class AL_25407 {
         int[] ans = new int[k];
 
         for (int i=0; i<k; i++) {
-            // 5895
         }
     }
     public static void dij(int start) {
