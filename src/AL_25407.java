@@ -55,7 +55,12 @@ public class AL_25407 {
         k = scanner.nextInt();
         int[] ans = new int[k];
 
+        // 542,060
+        // 424,877
+
+
         for (int i=0; i<k; i++) {
+
         }
     }
     public static void dij(int start) {
