@@ -27,7 +27,6 @@ public class AL_25407 {
             graph.put(i, new ArrayList<>());
         }
 
-
         for (int i=2; i<=N; i++) {
             int from = scanner.nextInt();
             int length = scanner.nextInt();
@@ -60,6 +59,7 @@ public class AL_25407 {
         // 424,877
 
         for (int i=0; i<k; i++) {
+
         }
     }
     public static void dij(int start) {
