@@ -42,7 +42,6 @@ public class AL_25407 {
                 vGraph.add(i);
             }
         }
-
         for (int i=1; i<=vGraph.size()-1; i++) {
             int from = vGraph.get(i);
             int to = vGraph.get(i%(vGraph.size()-1) + 1);
