@@ -56,7 +56,6 @@ public class AL_25407 {
 
         for (int i=0; i<k; i++) {
         }
-
     }
     public static void dij(int start) {
         PriorityQueue<Node> q = new PriorityQueue<>(Comparator.comparingInt(node -> node.distance));
